@@ -1,0 +1,5 @@
+flake8
+pytest
+six
+requests
+git+ssh://git@github.com/threatgrid/softserve-atqc.git#egg=ctrlibrary

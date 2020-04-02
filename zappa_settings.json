@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "app_function": "app.app",
+        "aws_region": "eu-central-1",
+        "exclude": [".env", "*.json", "*.md", "*.txt"],
+        "log_level": "INFO",
+        "keep_warm": false,
+        "manage_roles": false,
+        "profile_name": "serverless",
+        "project_name": "tr-qualys-relay",
+        "runtime": "python3.7",
+        "s3_bucket": "zappa-tr-qualys-relay"
+    }
+}

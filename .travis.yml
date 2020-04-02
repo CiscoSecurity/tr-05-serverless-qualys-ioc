@@ -1,0 +1,24 @@
+language: python
+
+python:
+- '3.6'
+- '3.7'
+- '3.8'
+
+before_install:
+- openssl aes-256-cbc -k "$travis_key_password" -d -md sha256 -a -in travis_key.enc -out ~/.ssh/id_rsa
+- chmod 400 ~/.ssh/id_rsa
+
+install:
+- pip install --upgrade -r requirements.txt
+- pip install --upgrade -r test-requirements.txt
+
+before_script:
+- cp ~/build/CiscoSecurity/tr-05-serverless-qualys-ioc/tests/functional/project.properties.sample ~/build/CiscoSecurity/project.properties
+- sed -i "s|app_hostname=.*|app_hostname=$app_hostname|" ~/build/CiscoSecurity/project.properties
+- sed -i "s|app_client_password=.*|app_client_password=$app_client_password|" ~/build/CiscoSecurity/project.properties
+
+script:
+- flake8 .
+- pytest tests/unit -v
+- pytest tests/functional -v

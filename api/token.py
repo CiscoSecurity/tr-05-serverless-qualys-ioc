@@ -6,6 +6,9 @@ from flask import session, current_app, request
 
 from .url import join
 
+agent = ('Cisco Threat Response Integrations '
+         '<tr-integrations-support@cisco.com>')
+
 
 def token(fresh: bool = False) -> str:
     """Returns an authorization token."""
@@ -22,13 +25,14 @@ def token(fresh: bool = False) -> str:
         password = credentials['pass']
 
         url = join(current_app.config['API_URL'], '/auth')
+        content = 'application/x-www-form-urlencoded'
 
         response = requests.post(url,
                                  data=b'username=' + username.encode() + b'&'
                                       b'password=' + password.encode() + b'&'
                                       b'token=true',
-                                 headers={'Content-Type':
-                                          'application/x-www-form-urlencoded'})
+                                 headers={'Content-Type': content,
+                                          'User-Agent': agent})
         response.raise_for_status()
 
         session['token'] = response.text
@@ -42,6 +46,5 @@ def headers(fresh: bool = False) -> Dict[str, str]:
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token(fresh),
         'Content-Type': 'application/json',
-        'User-Agent': ('Cisco Threat Response Integrations '
-                       '<tr-integrations-support@cisco.com>')
+        'User-Agent': agent
     }

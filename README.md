@@ -105,3 +105,11 @@ The `/observe/observables` endpoint returns lists of the following CTIM objects:
 These objects are constructed from events returned by the Qualys IOC API.
 The mapping between Qualys IOC events and CTIM objects can be found in the source code 
 (see [observables.py](https://github.com/CiscoSecurity/tr-05-serverless-qualys-ioc/blob/develop/api/observables.py)).
+
+Requests to the module must be performed with a JSON Web Token containing credentials of your Qualys account:
+```json
+{
+    "user": "...",
+    "pass": "..."
+}
+```

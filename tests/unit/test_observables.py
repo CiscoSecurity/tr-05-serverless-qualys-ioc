@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch
 from urllib.parse import quote
 
 from api.observables import \
@@ -89,25 +90,39 @@ def test_mutex_refer():
     )
 
 
+def events(path):
+    def patched(filter_, active, amount):
+        with open(path, 'r') as file:
+            data = json.loads(file.read())
+
+            return [data['input']] if active else []
+    return patched
+
+
+@patch('api.qualys.events', events('tests/unit/data/sha256.json'))
 def test_map():
-    with open('tests/unit/data/sha256.json') as file:
+    with open('tests/unit/data/sha256.json', 'r') as file:
         data = json.loads(file.read())
-        observable = Observable.of(data['observable']['type'])
-        output = observable.map(data['observable']['value'],
-                                data['input'],
-                                active=True)
 
-        assert output.keys() == data['output'].keys()
+    output = {}
 
-        for key in output.keys():
-            assert key in data['output']
-            assert len(output[key]) == len(data['output'][key])
+    observable = Observable.of(data['observable']['type'])
+    observable.observe(data['observable']['value'],
+                       output,
+                       limit=100)
 
-            for a, b in zip(output[key], data['output'][key]):
-                assert a.pop('id').startswith('transient:')
+    assert output.keys() == data['output'].keys()
 
-                if key == 'relationships':
-                    assert a.pop('source_ref').startswith('transient:')
-                    assert a.pop('target_ref').startswith('transient:')
+    for key in output.keys():
+        assert key in data['output']
+        assert len(output[key]['docs']) == len(data['output'][key])
+        assert len(output[key]['docs']) == output[key]['count']
 
-                assert a == b
+        for a, b in zip(output[key]['docs'], data['output'][key]):
+            assert a.pop('id').startswith('transient:')
+
+            if key == 'relationships':
+                assert a.pop('source_ref').startswith('transient:')
+                assert a.pop('target_ref').startswith('transient:')
+
+            assert a == b

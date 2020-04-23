@@ -1,17 +1,16 @@
 from abc import ABCMeta, abstractmethod
-from http import HTTPStatus
 from itertools import chain
-from typing import Optional, Dict, Any, Iterable, List
+from typing import Optional, Dict, Any, Iterable
 from urllib.parse import quote
 from uuid import uuid4
 
-import requests
-
-from .token import headers
+from . import qualys
 
 
 class Observable(metaclass=ABCMeta):
     """Represents an observable."""
+
+    SCHEMA = '1.0.16'
 
     @staticmethod
     def of(type_: str) -> Optional['Observable']:
@@ -38,110 +37,144 @@ class Observable(metaclass=ABCMeta):
         'MD5', 'file_path' should have a name 'file path', etc.
         """
 
-    def observe(self, api: str, observable: str) -> Dict[str, Any]:
+    @abstractmethod
+    def filter(self, observable: str) -> str:
+        """Returns a filter to search for the provided observable."""
+
+    def observe(self, observable: str, data: Dict[str, Any], limit: int):
         """Retrieves objects (sightings, verdicts, etc.) for an observable."""
 
-        def fetch(active_):
-            if active_:
-                url = f'{api}/ioc/events?state=true&' \
-                      f'filter={self.filter(observable)}'
-            else:
-                url = f'{api}/ioc/events?' \
-                      f'filter={self.filter(observable)}'
+        def truncate(name, objects):
+            return objects[:limit - data.get(name, {}).get('count', 0)]
 
-            response = requests.get(url, headers=headers())
-
-            # Refresh the token if expired.
-            if response.status_code == HTTPStatus.UNAUTHORIZED.value:
-                response = requests.get(url, headers=headers(fresh=True))
-
-            response.raise_for_status()
-
-            return response.json()
-
-        observed = {}
+        def append(name, objects):
+            data.setdefault(name, {})
+            data[name]['docs'] = data[name].get('docs', []) + objects
+            data[name]['count'] = len(data[name]['docs'])
 
         for active in [True, False]:
-            for event in fetch(active):
-                for obj, docs in self.map(observable, event, active).items():
-                    observed[obj] = observed.get(obj, []) + docs
+            amount = limit - data.get('sightings', {}).get('count', 0)
+            events = qualys.events(self.filter(observable), active, amount)
 
-        return observed
+            # Map received events to CTIM objects
+            # and append them to the result.
+            for event in events:
+                sightings = [self._sighting(event, observable, active)]
+                sightings = truncate('sightings', sightings)
+
+                indicators = [self._indicator(event)]
+                indicators = truncate('indicators', indicators)
+
+                judgements = self._judgements(event, observable)
+                judgements = truncate('judgements', judgements)
+
+                relationships = list(chain(
+                    self._relationships(judgements, 'based-on', indicators),
+                    self._relationships(sightings, 'based-on', judgements),
+                    self._relationships(sightings, 'sighting-of', indicators),
+                ))
+
+                append('sightings', sightings)
+                append('indicators', indicators)
+                append('judgements', judgements)
+                append('relationships', relationships)
 
     def refer(self, api: str, observable: str) -> str:
         """Returns a URL for pivoting back to Qualys."""
         return f'{api}/ioc/#/hunting?search={quote(self.filter(observable))}'
 
-    def map(self,
-            observable: str,
-            event: Dict[str, Any],
-            active: bool) -> Dict[str, List]:
-        """Maps Qualys' events to CTIM objects."""
-
+    @classmethod
+    def _sighting(cls, event: Dict[str, Any], observable: str, active: bool):
         confidence = 'High'
         severity = 'Medium'
-        schema = '1.0.16'
 
-        def sighting():
-            return {
-                'id': f'transient:{uuid4()}',
-                'confidence': confidence,
-                'count': 1,
-                'external_ids': [
-                    get(event, '.id')
-                ],
-                'external_references': [],
-                'observables': [
-                    {
-                        'type': self.type(),
-                        'value': observable
-                    }
-                ],
-                'observed_time': {
-                    'start_time': get(event, '.dateTime')
-                },
-                'relations': list(relations(event)),
-                'schema_version': schema,
-                'severity': severity,
-                'sensor': 'endpoint',
-                'source': 'Qualys IOC',
-                'targets': [
-                    {
-                        'observables': list(targets(event)),
-                        'observed_time': {
-                            'start_time': get(event, '.dateTime')
-                        },
-                        'type': 'endpoint',
-                        'os': get(event, '.asset.fullOSName')
-                    }
-                ],
-                'type': 'sighting',
-                'description': f'A Qualys IOC event related to "{observable}"',
-                'data': {
-                    'columns': [{'name': 'Active', 'type': 'string'}],
-                    'rows': [[str(active)]],
-                    'row_count': 1
-                },
-            }
+        return {
+            'id': f'transient:{uuid4()}',
+            'confidence': confidence,
+            'count': 1,
+            'external_ids': [
+                get(event, '.id')
+            ],
+            'external_references': [],
+            'observables': [
+                {
+                    'type': cls.type(),
+                    'value': observable
+                }
+            ],
+            'observed_time': {
+                'start_time': get(event, '.dateTime')
+            },
+            'relations': list(relations(event)),
+            'schema_version': cls.SCHEMA,
+            'severity': severity,
+            'sensor': 'endpoint',
+            'source': 'Qualys IOC',
+            'targets': [
+                {
+                    'observables': list(targets(event)),
+                    'observed_time': {
+                        'start_time': get(event, '.dateTime')
+                    },
+                    'type': 'endpoint',
+                    'os': get(event, '.asset.fullOSName')
+                }
+            ],
+            'type': 'sighting',
+            'description': f'A Qualys IOC event related to "{observable}"',
+            'data': {
+                'columns': [{'name': 'Active', 'type': 'string'}],
+                'rows': [[str(active)]],
+                'row_count': 1
+            },
+        }
 
-        def judgement(indicator2):
+    @classmethod
+    def _indicator(cls, event: Dict[str, Any]):
+        confidence = 'High'
+        severity = 'Medium'
+
+        return {
+            'id': f'transient:{uuid4()}',
+            'type': 'indicator',
+            'schema_version': cls.SCHEMA,
+            'source': 'Qualys IOC',
+            'producer': 'Qualys IOC',
+            'severity': severity,
+            'valid_time': {},
+            'external_ids': [
+                get(event, '.id')
+            ],
+            'confidence': confidence,
+        }
+
+    @classmethod
+    def _judgements(cls, event: Dict[str, Any], observable: str):
+        confidence = 'High'
+        severity = 'Medium'
+
+        dispositions = {
+            'KNOWN': 1,
+            'UNKNOWN': 5,
+            'MALICIOUS': 2,
+            'REMEDIATED': 2,
+        }
+        disposition_names = {
+            'KNOWN': 'Clean',
+            'UNKNOWN': 'Unknown',
+            'MALICIOUS': 'Malicious',
+            'REMEDIATED': 'Malicious',  # May be changed later.
+        }
+
+        judgements = []
+
+        for indicator2 in get(event, '.indicator2') or []:
             verdict = indicator2.get('verdict')
 
-            disposition = {
-                'KNOWN': 1,
-                'UNKNOWN': 5,
-                'MALICIOUS': 2,
-                'REMEDIATED': 2,
-            }.get(verdict) or 5
+            disposition = dispositions.get(verdict) or 5
+            disposition_name = disposition_names.get(verdict) or 'Unknown'
 
-            disposition_name = {
-                'KNOWN': 'Clean',
-                'UNKNOWN': 'Unknown',
-                'MALICIOUS': 'Malicious',
-                'REMEDIATED': 'Malicious',  # May be changed later.
-            }.get(verdict) or 'Unknown'
-
-            return {
+            judgement = {
                 'id': f'transient:{uuid4()}',
                 'confidence': confidence,
                 'disposition': disposition,
@@ -151,68 +184,41 @@ class Observable(metaclass=ABCMeta):
                 ],
                 'external_references': [],
                 'observable': {
-                    'type': self.type(),
+                    'type': cls.type(),
                     'value': observable
                 },
                 'priority': 90,
                 'reason': indicator2.get('threatName', ''),
-                'schema_version': schema,
+                'schema_version': cls.SCHEMA,
                 'severity': severity,
                 'source': 'Qualys IOC',
                 'type': 'judgement',
                 'valid_time': {}
             }
+            judgements.append(judgement)
 
-        def indicator():
-            return {
-                'id': f'transient:{uuid4()}',
-                'type': 'indicator',
-                'schema_version': schema,
-                'source': 'Qualys IOC',
-                'producer': 'Qualys IOC',
-                'severity': severity,
-                'valid_time': {},
-                'external_ids': [
-                    get(event, '.id')
-                ],
-                'confidence': confidence,
-            }
+        return judgements
 
-        def relationship(sources_, type_, targets_):
-            for source in sources_:
-                for target in targets_:
-                    yield {
-                        'id': f'transient:{uuid4()}',
-                        'type': 'relationship',
-                        'schema_version': schema,
-                        'source': 'Qualys IOC',
-                        'source_uri': '',
-                        'source_ref': source['id'],
-                        'target_ref': target['id'],
-                        'relationship_type': type_,
-                        'external_ids': []
-                    }
+    @classmethod
+    def _relationships(cls, sources_, type_, targets_):
+        relationships = []
 
-        sightings = [sighting()]
-        judgements = [judgement(x) for x in get(event, '.indicator2') or []]
-        indicators = [indicator()]
+        for source in sources_:
+            for target in targets_:
+                relationship = {
+                    'id': f'transient:{uuid4()}',
+                    'type': 'relationship',
+                    'schema_version': cls.SCHEMA,
+                    'source': 'Qualys IOC',
+                    'source_uri': '',
+                    'source_ref': source['id'],
+                    'target_ref': target['id'],
+                    'relationship_type': type_,
+                    'external_ids': []
+                }
+                relationships.append(relationship)
 
-        relationships = list(chain(
-            relationship(judgements, 'based-on', indicators),
-            relationship(sightings, 'based-on', judgements),
-            relationship(sightings, 'sighting-of', indicators),
-        ))
-
-        return {
-            'sightings': sightings,
-            'judgements': judgements,
-            'indicators': indicators,
-            'relationships': relationships
-        }
-
-    @abstractmethod
-    def filter(self, observable: str) -> str:
-        """Returns a filter to search for the provided observable."""
+        return relationships
 
 
 class MD5(Observable):

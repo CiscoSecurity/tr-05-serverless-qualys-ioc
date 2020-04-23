@@ -91,11 +91,12 @@ def test_mutex_refer():
 
 
 def events(path):
-    def patched(filter_, active, amount):
+    def patched(_, active, __):
         with open(path, 'r') as file:
             data = json.loads(file.read())
 
-            return [data['input']] if active else []
+            return data['input'] if active else []
+
     return patched
 
 
@@ -111,18 +112,36 @@ def test_map():
                        output,
                        limit=100)
 
-    assert output.keys() == data['output'].keys()
+    assert_mapped_correctly(output, data['output'])
 
-    for key in output.keys():
-        assert key in data['output']
-        assert len(output[key]['docs']) == len(data['output'][key])
-        assert len(output[key]['docs']) == output[key]['count']
 
-        for a, b in zip(output[key]['docs'], data['output'][key]):
-            assert a.pop('id').startswith('transient:')
+@patch('api.qualys.events', events('tests/unit/data/file_name.json'))
+def test_limits():
+    with open('tests/unit/data/file_name.json', 'r') as file:
+        data = json.loads(file.read())
+
+    output = {}
+
+    observable = Observable.of('file_name')
+    observable.observe('dummy', output, limit=3)
+
+    assert_mapped_correctly(output, data['output'])
+
+
+def assert_mapped_correctly(a, b):
+    assert a.keys() == b.keys()
+
+    for key in a.keys():
+        assert key in b
+        assert len(a[key]['docs']) == len(b[key]['docs'])
+        assert len(a[key]['docs']) == a[key]['count']
+        assert a[key]['count'] == b[key]['count']
+
+        for x, y in zip(a[key]['docs'], b[key]['docs']):
+            assert x.pop('id').startswith('transient:')
 
             if key == 'relationships':
-                assert a.pop('source_ref').startswith('transient:')
-                assert a.pop('target_ref').startswith('transient:')
+                assert x.pop('source_ref').startswith('transient:')
+                assert x.pop('target_ref').startswith('transient:')
 
-            assert a == b
+            assert x == y

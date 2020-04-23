@@ -38,7 +38,7 @@ def events(filter_: str, active: bool, amount: int):
 
 
 def token(fresh: bool = False) -> str:
-    """Returns an authorization token."""
+    """Returns an authorization token for Qualys."""
 
     if fresh or 'token' not in session:
         scheme, payload = request.headers['Authorization'].split(None, 1)
@@ -68,7 +68,7 @@ def token(fresh: bool = False) -> str:
 
 
 def headers(fresh: bool = False) -> Dict[str, str]:
-    """Returns headers with an authorization token."""
+    """Returns headers with an authorization token for Qualys."""
     return {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token(fresh),

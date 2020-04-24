@@ -22,7 +22,10 @@ def observe():
 
         observable = Observable.of(type_)
         if observable is not None:
-            observable.observe(value, data, limit)
+            for name, objects in observable.observe(value, limit).items():
+                data.setdefault(name, {})
+                data[name]['docs'] = data[name].get('docs', []) + objects
+                data[name]['count'] = len(data[name]['docs'])
 
     return jsonify({'data': data})
 

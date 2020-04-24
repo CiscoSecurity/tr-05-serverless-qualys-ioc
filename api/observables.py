@@ -41,8 +41,10 @@ class Observable(metaclass=ABCMeta):
     def filter(self, observable: str) -> str:
         """Returns a filter to search for the provided observable."""
 
-    def observe(self, observable: str, data: Dict[str, Any], limit: int):
+    def observe(self, observable: str, limit: int) -> Dict[str, Any]:
         """Retrieves objects (sightings, verdicts, etc.) for an observable."""
+
+        data = {}
 
         def truncate(name, objects):
             return objects[:limit - data.get(name, {}).get('count', 0)]
@@ -78,6 +80,8 @@ class Observable(metaclass=ABCMeta):
                 append('indicators', indicators)
                 append('judgements', judgements)
                 append('relationships', relationships)
+
+        return data
 
     def refer(self, api: str, observable: str) -> str:
         """Returns a URL for pivoting back to Qualys."""

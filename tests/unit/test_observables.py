@@ -105,12 +105,9 @@ def test_map():
     with open('tests/unit/data/sha256.json', 'r') as file:
         data = json.loads(file.read())
 
-    output = {}
-
     observable = Observable.of(data['observable']['type'])
-    observable.observe(data['observable']['value'],
-                       output,
-                       limit=100)
+    output = observable.observe(data['observable']['value'],
+                                limit=100)
 
     assert_mapped_correctly(output, data['output'])
 
@@ -120,10 +117,8 @@ def test_limits():
     with open('tests/unit/data/file_name.json', 'r') as file:
         data = json.loads(file.read())
 
-    output = {}
-
     observable = Observable.of('file_name')
-    observable.observe('dummy', output, limit=3)
+    output = observable.observe('dummy', limit=3)
 
     assert_mapped_correctly(output, data['output'])
 

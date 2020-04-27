@@ -5,6 +5,7 @@ import pytest
 
 from ctrlibrary.core import settings
 from ctrlibrary.relay_api.base import RelayApiToken
+from ctrlibrary.threatresponse import token
 from tests.functional.library.endpoints import RELAY_PREFIX
 
 
@@ -27,3 +28,14 @@ def relay_api(session_headers):
         prefix=RELAY_PREFIX,
         token={'headers': session_headers}
     )
+
+
+@pytest.fixture(scope='module')
+def module_token():
+    return token.request_token(
+        settings.server.ctr_client_id, settings.server.ctr_client_password)
+
+
+@pytest.fixture(scope='module')
+def module_headers(module_token):
+    return {'Authorization': 'Bearer {}'.format(module_token)}

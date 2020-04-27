@@ -13,8 +13,8 @@ api = Blueprint('enrich', __name__)
 def observe():
     observables = json(request, schema.observables)
 
-    url = current_app.config['API_URL']
     data = {}
+    limit = current_app.config['CTR_ENTITIES_LIMIT']
 
     for pair in observables:
         type_ = pair['type']
@@ -24,13 +24,13 @@ def observe():
         if observable is None:
             continue
 
-        observed = observable.observe(url, value)
+        for name, objects in observable.observe(value, limit).items():
+            if objects['count'] == 0:
+                continue
 
-        for obj, docs in observed.items():
-            if docs:
-                data.setdefault(obj, {})
-                data[obj]['docs'] = data[obj].get('docs', []) + docs
-                data[obj]['count'] = len(data[obj]['docs'])
+            data.setdefault(name, {})
+            data[name]['docs'] = data[name].get('docs', []) + objects['docs']
+            data[name]['count'] = data[name].get('count', 0) + objects['count']
 
     return jsonify({'data': data})
 

@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch
 from urllib.parse import quote
 
 from api.observables import \
@@ -89,25 +90,53 @@ def test_mutex_refer():
     )
 
 
+def events(path):
+    def patched(_, active, __):
+        with open(path, 'r') as file:
+            data = json.loads(file.read())
+
+            return data['input'] if active else []
+
+    return patched
+
+
+@patch('api.qualys.events', events('tests/unit/data/sha256.json'))
 def test_map():
-    with open('tests/unit/data/sha256.json') as file:
+    with open('tests/unit/data/sha256.json', 'r') as file:
         data = json.loads(file.read())
-        observable = Observable.of(data['observable']['type'])
-        output = observable.map(data['observable']['value'],
-                                data['input'],
-                                active=True)
 
-        assert output.keys() == data['output'].keys()
+    observable = Observable.of(data['observable']['type'])
+    output = observable.observe(data['observable']['value'],
+                                limit=100)
 
-        for key in output.keys():
-            assert key in data['output']
-            assert len(output[key]) == len(data['output'][key])
+    assert_mapped_correctly(output, data['output'])
 
-            for a, b in zip(output[key], data['output'][key]):
-                assert a.pop('id').startswith('transient:')
 
-                if key == 'relationships':
-                    assert a.pop('source_ref').startswith('transient:')
-                    assert a.pop('target_ref').startswith('transient:')
+@patch('api.qualys.events', events('tests/unit/data/file_name.json'))
+def test_limits():
+    with open('tests/unit/data/file_name.json', 'r') as file:
+        data = json.loads(file.read())
 
-                assert a == b
+    observable = Observable.of('file_name')
+    output = observable.observe('dummy', limit=3)
+
+    assert_mapped_correctly(output, data['output'])
+
+
+def assert_mapped_correctly(a, b):
+    assert a.keys() == b.keys()
+
+    for key in a.keys():
+        assert key in b
+        assert len(a[key]['docs']) == len(b[key]['docs'])
+        assert len(a[key]['docs']) == a[key]['count']
+        assert a[key]['count'] == b[key]['count']
+
+        for x, y in zip(a[key]['docs'], b[key]['docs']):
+            assert x.pop('id').startswith('transient:')
+
+            if key == 'relationships':
+                assert x.pop('source_ref').startswith('transient:')
+                assert x.pop('target_ref').startswith('transient:')
+
+            assert x == y

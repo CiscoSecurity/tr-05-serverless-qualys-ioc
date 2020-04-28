@@ -56,7 +56,8 @@ class Observable(metaclass=ABCMeta):
 
         for active in [True, False]:
             amount = limit - data.get('sightings', {}).get('count', 0)
-            events = qualys.events(self.filter(observable), active, amount)
+            events = qualys.events(quote(self.filter(observable)),
+                                   active, amount)
 
             # Map received events to CTIM objects
             # and append them to the result.

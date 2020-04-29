@@ -152,7 +152,7 @@ def test_positive_enrich_observe_observables_detail_sightings(module_headers):
 @pytest.mark.parametrize(
     'observable, observable_type',
     (('a23-38-112-137.deploy.static.akamaitechnologies.com', 'domain'),
-     ('52.58.78.16', 'ip'),
+     ('127.0.0.1', 'ip'),
      ('415e5cc23e106483711abe70ad78c8e2', 'md5'),
      ('WininetStartupMutex', 'mutex'),
      (r'C:\Users\User01\Downloads\Malware', 'file_path'),

@@ -151,7 +151,7 @@ def test_positive_enrich_observe_observables_detail_sightings(module_headers):
 
 @pytest.mark.parametrize(
     'observable, observable_type',
-    (('ec2-52-58-78-16.eu-central-1.compute.amazonaws.com', 'domain'),
+    (('a23-38-112-137.deploy.static.akamaitechnologies.com', 'domain'),
      ('52.58.78.16', 'ip'),
      ('415e5cc23e106483711abe70ad78c8e2', 'md5'),
      ('WininetStartupMutex', 'mutex'),

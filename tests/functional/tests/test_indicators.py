@@ -10,8 +10,8 @@ SCHEMA_VERSION = '1.0.16'
     'observable,observable_type',
     (('701fb8ed9d1f72c901e207dd01b481266be8458f6e03750c1a139c901f2995fa',
       'sha256'),
-     ('ec2-52-58-78-16.eu-central-1.compute.amazonaws.com', 'domain'),
-     ('52.58.78.16', 'ip'),
+     ('a23-38-112-137.deploy.static.akamaitechnologies.com', 'domain'),
+     ('127.0.0.1', 'ip'),
      ('WininetStartupMutex', 'mutex'),
      (r'C:\Users\User01\Downloads\Malware', 'file_path'),
      ('buzus.exe', 'file_name'))

@@ -24,4 +24,4 @@ before_script:
 script:
 - flake8 .
 - pytest tests/unit -v
-- if [[ $TRAVIS_PYTHON == 3.8 ]]; then pytest tests/functional -v; fi
+- if [[ $TRAVIS_PYTHON_VERSION == 3.8 ]]; then pytest tests/functional -v; fi

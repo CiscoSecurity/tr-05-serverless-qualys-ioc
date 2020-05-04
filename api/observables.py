@@ -91,7 +91,6 @@ class Observable(metaclass=ABCMeta):
     @classmethod
     def _sighting(cls, event: Dict[str, Any], observable: str, active: bool):
         confidence = 'High'
-        severity = 'Medium'
 
         return {
             'id': f'transient:{uuid4()}',
@@ -112,7 +111,7 @@ class Observable(metaclass=ABCMeta):
             },
             'relations': list(relations(event)),
             'schema_version': cls.SCHEMA,
-            'severity': severity,
+            'severity': severity(event),
             'sensor': 'endpoint',
             'source': 'Qualys IOC',
             'targets': [
@@ -137,7 +136,6 @@ class Observable(metaclass=ABCMeta):
     @classmethod
     def _indicator(cls, event: Dict[str, Any]):
         confidence = 'High'
-        severity = 'Medium'
 
         return {
             'id': f'transient:{uuid4()}',
@@ -145,7 +143,7 @@ class Observable(metaclass=ABCMeta):
             'schema_version': cls.SCHEMA,
             'source': 'Qualys IOC',
             'producer': 'Qualys IOC',
-            'severity': severity,
+            'severity': severity(event),
             'valid_time': {},
             'external_ids': [
                 get(event, '.id')
@@ -156,19 +154,20 @@ class Observable(metaclass=ABCMeta):
     @classmethod
     def _judgements(cls, event: Dict[str, Any], observable: str):
         confidence = 'High'
-        severity = 'Medium'
 
         dispositions = {
-            'KNOWN': 1,
-            'UNKNOWN': 5,
-            'MALICIOUS': 2,
-            'REMEDIATED': 2,
+            'Clean': 1,
+            'Malicious': 2,
+            'Suspicious': 3,
+            'Common': 4,
+            'Unknown': 5,
         }
         disposition_names = {
             'KNOWN': 'Clean',
             'UNKNOWN': 'Unknown',
+            'SUSPICIOUS': 'Suspicious',
             'MALICIOUS': 'Malicious',
-            'REMEDIATED': 'Malicious',  # May be changed later.
+            'REMEDIATED': 'Malicious',
         }
 
         judgements = []
@@ -176,8 +175,8 @@ class Observable(metaclass=ABCMeta):
         for indicator2 in get(event, '.indicator2') or []:
             verdict = indicator2.get('verdict')
 
-            disposition = dispositions.get(verdict) or 5
             disposition_name = disposition_names.get(verdict) or 'Unknown'
+            disposition = dispositions[disposition_name]
 
             judgement = {
                 'id': f'transient:{uuid4()}',
@@ -195,7 +194,7 @@ class Observable(metaclass=ABCMeta):
                 'priority': 90,
                 'reason': indicator2.get('threatName', ''),
                 'schema_version': cls.SCHEMA,
-                'severity': severity,
+                'severity': severity(event),
                 'source': 'Qualys IOC',
                 'type': 'judgement',
                 'valid_time': {}
@@ -403,3 +402,41 @@ def targets(event: Dict[str, Any]) -> Iterable[Dict[str, Any]]:
             yield {'type': 'ip', 'value': interface['ipAddress']}
         if interface.get('macAddress'):
             yield {'type': 'mac_address', 'value': interface['macAddress']}
+
+
+def severity(event: Dict[str, Any]) -> str:
+    """Maps `score` of a Qualys event to `severity`.
+
+    Possible `score` values:
+         0 = Known Good [File/Process/Network]
+         1 = Remediated [File/Process/Network]
+         2 = Suspicious Low File event
+         3 = Suspicious Low Process event
+         4 = Suspicious Low Network event
+         5 = Suspicious Medium File event
+         6 = Suspicious Medium Process event
+         7 = Suspicious Medium Network event
+         8 = Malicious File event
+         9 = Malicious Process event
+        10 = Malicious Network event
+    """
+    if 'score' not in event:
+        return 'Unknown'
+
+    scores = {
+        '0': 'None',
+        '1': 'High',
+        '2': 'Low',
+        '3': 'Low',
+        '4': 'Low',
+        '5': 'Medium',
+        '6': 'Medium',
+        '7': 'Medium',
+        '8': 'High',
+        '9': 'High',
+        '10': 'High'
+    }
+
+    score = event['score']
+
+    return scores.get(score, 'Unknown')

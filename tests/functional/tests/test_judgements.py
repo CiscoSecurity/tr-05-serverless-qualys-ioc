@@ -87,7 +87,7 @@ def test_positive_enrich_observe_observables_detail_judgements(module_headers):
 
     expected_observable = {
         'schema_version': SCHEMA_VERSION,
-        'severity': 'Medium',
+        'severity': 'High',
         'source': 'Qualys IOC',
         'type': 'judgement',
         'external_ids': (

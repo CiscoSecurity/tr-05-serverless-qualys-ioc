@@ -89,7 +89,8 @@ def test_positive_enrich_observe_observables_sightings(
         payload=observables,
         **{'headers': module_headers})['data']
     sightings = get_observables(response, 'Qualys IOC')['data']['sightings']
-    total_sightings = 0
+
+    assert len(sightings['docs']) > 0
 
     # Check respond data
     for sighting in sightings['docs']:
@@ -118,6 +119,5 @@ def test_positive_enrich_observe_observables_sightings(
         assert sighting['targets'][0]['observables']
         assert sighting['targets'][0]['observed_time']['start_time']
         assert sighting['targets'][0]['os']
-        total_sightings += 1
 
-    assert total_sightings == sightings['count']
+    assert sightings['count'] == len(sightings['docs'])

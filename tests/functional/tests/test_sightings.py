@@ -105,7 +105,7 @@ def test_positive_enrich_observe_observables_sightings(
         assert sighting['observables'] == observables
         assert sighting['observed_time']['start_time']
         assert sighting['id']
-        assert sighting['type']
+        assert sighting['type'] == 'sighting'
         assert sighting['count'] == 1
         assert sighting['source'] == 'Qualys IOC'
         assert sighting['external_ids']

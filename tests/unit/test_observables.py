@@ -22,7 +22,7 @@ def test_md5_refer():
     url = observable.refer(api='', observable='deadbeef')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('file.hash.md5: "deadbeef"')
     )
 
@@ -32,7 +32,7 @@ def test_sha256_refer():
     url = observable.refer(api='', observable='deadbeef')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('file.hash.sha256: "deadbeef"')
     )
 
@@ -42,7 +42,7 @@ def test_file_name_refer():
     url = observable.refer(api='', observable='danger.exe')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('file.name: "danger.exe"')
     )
 
@@ -52,7 +52,7 @@ def test_file_path_refer():
     url = observable.refer(api='', observable='\\path\\to\\danger.exe')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('file.fullPath: "\\path\\to\\danger.exe"')
     )
 
@@ -62,7 +62,7 @@ def test_ip_refer():
     url = observable.refer(api='', observable='1.2.3.4')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote(
             'network.local.address.ip: "1.2.3.4" or '
             'network.remote.address.ip: "1.2.3.4"'
@@ -75,7 +75,7 @@ def test_domain_refer():
     url = observable.refer(api='', observable='danger.com')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('network.remote.address.fqdn: "danger.com"')
     )
 
@@ -85,7 +85,7 @@ def test_mutex_refer():
     url = observable.refer(api='', observable='danger')
 
     assert url == (
-        f'/ioc/#/hunting?search=' +
+        '/ioc/#/hunting?search=' +
         quote('handle.name: "danger"')
     )
 

@@ -85,10 +85,16 @@ def test_positive_enrich_observe_observables_sightings(
     ]
     # Get sightings
     observables = [{"value": observable, "type": observable_type}]
-    response = enrich_observe_observables(
+    response_from_all_modules = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers})['data']
-    sightings = get_observables(response, 'Qualys IOC')['data']['sightings']
+    response_from_qualys_module = get_observables(
+        response_from_all_modules, 'Qualys IOC')
+    assert response_from_qualys_module['module'] == 'Qualys IOC'
+    assert response_from_qualys_module['module_instance_id']
+    assert response_from_qualys_module['module_type_id']
+
+    sightings = response_from_qualys_module['data']['sightings']
 
     assert len(sightings['docs']) > 0
 

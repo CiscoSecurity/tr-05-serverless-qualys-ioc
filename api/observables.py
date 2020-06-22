@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from contextlib import suppress
 from itertools import chain
 from typing import Optional, Dict, Any, Iterable, List
 from urllib.parse import quote

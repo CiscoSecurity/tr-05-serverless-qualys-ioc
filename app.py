@@ -22,7 +22,12 @@ def handle_http(ex: HTTPError):
         return jsonify({})
 
     def error(**kwargs):
-        return jsonify({'errors': [{'type': 'fatal', **kwargs}]})
+        payload = {'errors': [{'type': 'fatal', **kwargs}]}
+
+        if hasattr(ex, 'data'):
+            payload.update(ex.data)
+
+        return jsonify(payload)
 
     if code == HTTPStatus.BAD_REQUEST:
         return empty()
@@ -41,20 +46,25 @@ def handle_http(ex: HTTPError):
                      message='Service temporarily unavailable. '
                              'Please try again later.')
 
-    return error(code='oops',
-                 message='Something went wrong.')
+    return handle_any(ex)
 
 
 @app.errorhandler(Exception)
 def handle_any(ex: Exception):
-    code = getattr(ex, 'code', 500)
-    message = getattr(ex, 'description', 'Something went wrong.')
-    reason = '.'.join([
-        ex.__class__.__module__,
-        ex.__class__.__name__
-    ])
+    payload = {
+        'errors': [
+            {
+                'type': 'fatal',
+                'code': 'oops',
+                'message': 'Something went wrong.'
+            }
+        ]
+    }
 
-    return jsonify(code=code, message=message, reason=reason), code
+    if hasattr(ex, 'data'):
+        payload.update(ex.data)
+
+    return jsonify(payload)
 
 
 if __name__ == '__main__':

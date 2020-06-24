@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from itertools import chain
-from typing import Optional, Dict, Any, Iterable
+from typing import Optional, Dict, Any, Iterable, List
 from urllib.parse import quote
 from uuid import uuid4
 
@@ -89,12 +89,13 @@ class Observable(metaclass=ABCMeta):
         return f'{api}/ioc/#/hunting?search={quote(self.filter(observable))}'
 
     @classmethod
-    def _sighting(cls, event: Dict[str, Any], observable: str, active: bool):
-        confidence = 'High'
+    def _sighting(cls, event: Dict[str, Any], observable: str, active: bool) \
+            -> Dict[str, Any]:
+        """Constructs a single CTIM sighting from a Qualys IOC event."""
 
-        return {
+        return clean({
             'id': f'transient:{uuid4()}',
-            'confidence': confidence,
+            'confidence': 'High',
             'count': 1,
             'external_ids': [
                 get(event, '.id')
@@ -131,13 +132,14 @@ class Observable(metaclass=ABCMeta):
                 'rows': [[str(active)]],
                 'row_count': 1
             },
-        }
+        })
 
     @classmethod
-    def _indicator(cls, event: Dict[str, Any]):
-        confidence = 'High'
+    def _indicator(cls, event: Dict[str, Any]) \
+            -> Dict[str, Any]:
+        """Constructs a single CTIM indicator from a Qualys IOC event."""
 
-        return {
+        return clean({
             'id': f'transient:{uuid4()}',
             'type': 'indicator',
             'schema_version': cls.SCHEMA,
@@ -148,12 +150,13 @@ class Observable(metaclass=ABCMeta):
             'external_ids': [
                 get(event, '.id')
             ],
-            'confidence': confidence,
-        }
+            'confidence': 'High',
+        })
 
     @classmethod
-    def _judgements(cls, event: Dict[str, Any], observable: str):
-        confidence = 'High'
+    def _judgements(cls, event: Dict[str, Any], observable: str) \
+            -> List[Dict[str, Any]]:
+        """Constructs CTIM judgements from a Qualys IOC event."""
 
         dispositions = {
             'Clean': 1,
@@ -178,9 +181,9 @@ class Observable(metaclass=ABCMeta):
             disposition_name = disposition_names.get(verdict) or 'Unknown'
             disposition = dispositions[disposition_name]
 
-            judgement = {
+            judgement = clean({
                 'id': f'transient:{uuid4()}',
-                'confidence': confidence,
+                'confidence': 'High',
                 'disposition': disposition,
                 'disposition_name': disposition_name,
                 'external_ids': [
@@ -198,18 +201,24 @@ class Observable(metaclass=ABCMeta):
                 'source': 'Qualys IOC',
                 'type': 'judgement',
                 'valid_time': {}
-            }
+            })
             judgements.append(judgement)
 
         return judgements
 
     @classmethod
-    def _relationships(cls, sources_, type_, targets_):
+    def _relationships(cls,
+                       sources_: Iterable[Dict[str, Any]],
+                       type_: str,
+                       targets_: Iterable[Dict[str, Any]]) \
+            -> List[Dict[str, Any]]:
+        """Constructs CTIM relationships between source and target objects."""
+
         relationships = []
 
         for source in sources_:
             for target in targets_:
-                relationship = {
+                relationship = clean({
                     'id': f'transient:{uuid4()}',
                     'type': 'relationship',
                     'schema_version': cls.SCHEMA,
@@ -219,7 +228,7 @@ class Observable(metaclass=ABCMeta):
                     'target_ref': target['id'],
                     'relationship_type': type_,
                     'external_ids': []
-                }
+                })
                 relationships.append(relationship)
 
         return relationships
@@ -343,6 +352,22 @@ def get(event: Dict[str, Any], path: str, default: Any = None) -> Any:
     return result
 
 
+def clean(data: Any) -> Any:
+    """Recursively cleans a `dict` or a `list` from 'None' values."""
+
+    if isinstance(data, list):
+        return [x for x in map(clean, data) if x is not None]
+
+    if isinstance(data, dict):
+        result = {key: clean(value) for key, value in data.items()}
+        result = {key: value for key, value in result.items()
+                  if value is not None}
+
+        return result
+
+    return data
+
+
 def relations(event: Dict[str, Any]) -> Iterable[Dict[str, Any]]:
     """Constructs relations based on the provided event."""
 
@@ -420,6 +445,7 @@ def severity(event: Dict[str, Any]) -> str:
          9 = Malicious Process event
         10 = Malicious Network event
     """
+
     if 'score' not in event:
         return 'Unknown'
 

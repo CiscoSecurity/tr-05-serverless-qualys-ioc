@@ -1,17 +1,16 @@
 language: python
 
 python:
-- '3.6'
 - '3.7'
-- '3.8'
 
 before_install:
 - openssl aes-256-cbc -k "$travis_key_password" -d -md sha256 -a -in travis_key.enc -out ~/.ssh/id_rsa
 - chmod 400 ~/.ssh/id_rsa
 
 install:
-- pip install --upgrade -r requirements.txt
-- pip install --upgrade -r test-requirements.txt
+- pip install --upgrade --requirement requirements.txt
+- pip install --upgrade --requirement test-requirements.txt
+- pip install --upgrade git+ssh://git@github.com/threatgrid/softserve-atqc.git#egg=ctrlibrary
 
 before_script:
 - cp ~/build/CiscoSecurity/tr-05-serverless-qualys-ioc/tests/functional/project.properties.sample ~/build/CiscoSecurity/project.properties
@@ -23,5 +22,5 @@ before_script:
 
 script:
 - flake8 .
-- pytest tests/unit -v
-- if [[ $TRAVIS_PYTHON_VERSION == 3.8 ]]; then pytest tests/functional -v; fi
+- coverage run --source api/ -m pytest --verbose tests/unit/ && coverage report
+- pytest --verbose tests/functional/

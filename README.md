@@ -336,7 +336,7 @@ The only thing to keep in mind is:
 
 #### `Judgement`
 
-Each entry in the `indicator2` list of an event is mapped to a single `Sighting`.
+Each entry in the `indicator2` list of an event is mapped to a single `Judgement`.
 The mapping is defined as follows:
 
 - `disposition` of a `Judgement` is mapped from `indicator2[].verdict` as follows:

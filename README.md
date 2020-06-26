@@ -355,7 +355,7 @@ The mapping is defined as follows:
 
 #### `Relationship`
 
-`Relationships` are defined between `Sighting`, `Indicator` and `Judgements` as follows:
+`Relationships` between `Sighting`, `Indicator` and `Judgements` are defined as follows:
 
 | Source       | Relation    | Target       |
 |--------------|-------------|--------------|

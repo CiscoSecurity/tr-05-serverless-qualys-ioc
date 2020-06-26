@@ -1,6 +1,6 @@
 [![Travis CI Build Status](https://travis-ci.com/CiscoSecurity/tr-05-serverless-qualys-ioc.svg?branch=develop)](https://api.travis-ci.com/CiscoSecurity/tr-05-serverless-qualys-ioc)
 
-# Microsoft Graph Security Relay
+# Qualys IOC Relay
 
 Concrete Relay implementation using
 [Qualys IOC](https://www.qualys.com/apps/indication-of-compromise/)

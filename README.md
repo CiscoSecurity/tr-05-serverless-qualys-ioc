@@ -278,8 +278,7 @@ header set to `Bearer <JWT>`.
   - Applies to the following CTIM entities:
     - `Sighting`,
     - `Indicator`,
-    - `Judgement`,
-    - `Relationship`.
+    - `Judgement`.
   - Must be a positive integer. Defaults to `100` (if unset or incorrect).
 
 - `API_URL`

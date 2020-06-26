@@ -30,8 +30,11 @@ def observe():
                     continue
 
                 data.setdefault(name, {})
-                data[name]['docs'] = data[name].get('docs', []) + objects['docs']
-                data[name]['count'] = data[name].get('count', 0) + objects['count']
+                data[name].setdefault('docs', [])
+                data[name].setdefault('count', 0)
+
+                data[name]['docs'] += objects['docs']
+                data[name]['count'] += objects['count']
     except Exception as exception:
         if data:
             setattr(exception, 'data', {'data': data})

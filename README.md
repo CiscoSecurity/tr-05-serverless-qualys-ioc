@@ -296,7 +296,7 @@ header set to `Bearer <JWT>`.
 ### CTIM Mapping Specifics
 
 Each Qualys IOC event produces a single `Sighting`, a single `Indicator`, a list of `Judgements` (may be empty)
-and corresponding `Relations` between them.
+and the corresponding `Relations` between them.
 
 #### `Sighting`
 

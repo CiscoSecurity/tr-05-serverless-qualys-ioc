@@ -10,7 +10,7 @@ from . import qualys
 class Observable(metaclass=ABCMeta):
     """Represents an observable."""
 
-    SCHEMA = '1.0.16'
+    SCHEMA = '1.0.17'
 
     @staticmethod
     def of(type_: str) -> Optional['Observable']:
@@ -94,7 +94,7 @@ class Observable(metaclass=ABCMeta):
         """Constructs a single CTIM sighting from a Qualys IOC event."""
 
         return clean({
-            'id': f'transient:{uuid4()}',
+            'id': f'transient:sighting-{uuid4()}',
             'confidence': 'High',
             'count': 1,
             'external_ids': [
@@ -140,7 +140,7 @@ class Observable(metaclass=ABCMeta):
         """Constructs a single CTIM indicator from a Qualys IOC event."""
 
         return clean({
-            'id': f'transient:{uuid4()}',
+            'id': f'transient:indicator-{uuid4()}',
             'type': 'indicator',
             'schema_version': cls.SCHEMA,
             'source': 'Qualys IOC',
@@ -182,7 +182,7 @@ class Observable(metaclass=ABCMeta):
             disposition = dispositions[disposition_name]
 
             judgement = clean({
-                'id': f'transient:{uuid4()}',
+                'id': f'transient:judgement-{uuid4()}',
                 'confidence': 'High',
                 'disposition': disposition,
                 'disposition_name': disposition_name,
@@ -219,7 +219,7 @@ class Observable(metaclass=ABCMeta):
         for source in sources_:
             for target in targets_:
                 relationship = clean({
-                    'id': f'transient:{uuid4()}',
+                    'id': f'transient:relationship-{uuid4()}',
                     'type': 'relationship',
                     'schema_version': cls.SCHEMA,
                     'source': 'Qualys IOC',

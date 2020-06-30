@@ -1,6 +1,8 @@
 import os
 from typing import Any
 
+from version import VERSION
+
 
 def positive_int(value: Any, default: int) -> int:
     """Parses positive integers."""
@@ -14,6 +16,8 @@ def positive_int(value: Any, default: int) -> int:
 
 
 class Config:
+    VERSION = VERSION
+
     API_URL = os.environ.get('API_URL', '')
     PLATFORM_URL = os.environ.get('PLATFORM_URL', '')
 

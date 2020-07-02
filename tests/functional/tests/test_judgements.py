@@ -3,7 +3,7 @@ import pytest
 from ctrlibrary.threatresponse.enrich import enrich_observe_observables
 from ctrlibrary.core.utils import get_observables
 
-SCHEMA_VERSION = '1.0.16'
+SCHEMA_VERSION = '1.0.17'
 
 
 @pytest.mark.parametrize(

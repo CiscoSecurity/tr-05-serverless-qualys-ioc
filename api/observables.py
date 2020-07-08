@@ -108,7 +108,8 @@ class Observable(metaclass=ABCMeta):
                 }
             ],
             'observed_time': {
-                'start_time': get(event, '.dateTime')
+                'start_time': get(event, '.dateTime'),
+                'end_time': get(event, '.dateTime')
             },
             'relations': list(relations(event)),
             'schema_version': cls.SCHEMA,
@@ -119,7 +120,8 @@ class Observable(metaclass=ABCMeta):
                 {
                     'observables': list(targets(event)),
                     'observed_time': {
-                        'start_time': get(event, '.dateTime')
+                        'start_time': get(event, '.dateTime'),
+                        'end_time': get(event, '.dateTime')
                     },
                     'type': 'endpoint',
                     'os': get(event, '.asset.fullOSName')

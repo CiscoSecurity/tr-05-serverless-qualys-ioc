@@ -64,7 +64,8 @@
           }
         ],
         "observed_time": {
-          "start_time": "2020-02-10T00:21:04.000+0000"
+          "start_time": "2020-02-10T00:21:04.000+0000",
+          "end_time": "2020-02-10T00:21:04.000+0000"
         },
         "relations": [
           {
@@ -137,7 +138,8 @@
               }
             ],
             "observed_time": {
-              "start_time": "2020-02-10T00:21:04.000+0000"
+              "start_time": "2020-02-10T00:21:04.000+0000",
+              "end_time": "2020-02-10T00:21:04.000+0000"
             },
             "type": "endpoint",
             "os": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130"

@@ -2,8 +2,9 @@ import json
 from unittest.mock import patch
 from urllib.parse import quote
 
-from api.observables import \
+from api.observables import (
     Observable, MD5, SHA256, FileName, FilePath, IP, Domain, Mutex
+)
 
 
 def test_observable_of():

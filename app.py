@@ -2,9 +2,9 @@ from http import HTTPStatus
 
 from flask import Flask, jsonify
 from requests import HTTPError
+from requests.exceptions import SSLError
 
 from api import health, enrich, respond
-
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -47,6 +47,24 @@ def handle_http(ex: HTTPError):
                              'Please try again later.')
 
     return handle_any(ex)
+
+
+@app.errorhandler(SSLError)
+def handle_ssl(ex: SSLError):
+    error = ex.args[0].reason.args[0]
+    message = getattr(error, 'verify_message', error.args[0]).capitalize()
+
+    payload = {
+        'errors': [
+            {
+                'type': 'fatal',
+                'code': 'unknown',
+                'message': f'Unable to verify SSL certificate: {message}'
+            }
+        ]
+    }
+
+    return jsonify(payload)
 
 
 @app.errorhandler(Exception)

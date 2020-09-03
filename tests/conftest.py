@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from http import HTTPStatus
 from unittest.mock import MagicMock
@@ -103,6 +104,16 @@ def qualys_response_internal_server_error(secret_key):
 
 
 @fixture(scope='session')
+def qualys_response_events(secret_key):
+    with open('tests/unit/data/file_name.json', 'r') as file:
+        data = json.loads(file.read())
+        return qualys_api_response_mock(
+            HTTPStatus.OK,
+            json_=lambda: data['input']
+        )
+
+
+@fixture(scope='session')
 def qualys_response_token(secret_key):
     return qualys_api_response_mock(
         HTTPStatus.OK,
@@ -156,11 +167,11 @@ def refer_expected_payload():
         'data': [
             {
                 'categories': ['Search', 'Qualys'],
-                'description': 'Check this domain status with Qualys',
-                'id': 'ref-qualys-search-domain-google.com',
-                'title': 'Search for this domain',
-                'url': '/ioc/#/hunting?search=network.remote.address.'
-                       'fqdn%3A%20%22google.com%22'
+                'description': 'Check this file name status with Qualys',
+                'id': 'ref-qualys-search-file_name-ChromeSetup.exe',
+                'title': 'Search for this file name',
+                'url': '/ioc/#/hunting'
+                       '?search=file.name%3A%20%22ChromeSetup.exe%22'
             }
         ]
     }

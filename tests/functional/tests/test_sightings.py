@@ -1,8 +1,16 @@
 import pytest
-
 from ctrlibrary.threatresponse.enrich import (
-    enrich_refer_observables, enrich_observe_observables)
+    enrich_refer_observables,
+    enrich_observe_observables
+)
 from ctrlibrary.core.utils import get_observables
+from tests.functional.tests.constants import (
+    MODULE_NAME,
+    CONFIDENCE,
+    SEVERITY,
+    OBSERVABLE_HUMAN_READABLE_NAME,
+    CTR_ENTITIES_LIMIT
+)
 
 
 @pytest.mark.parametrize(
@@ -31,25 +39,25 @@ def test_positive_relay_refer_observables_sightings(
 
     Importance: Critical
     """
-
-    # Get sightings
-    observables = [{"value": observable, "type": observable_type}]
-    response = enrich_refer_observables(
+    observables = [{'value': observable, 'type': observable_type}]
+    response_from_all_modules = enrich_refer_observables(
         payload=observables,
         **{'headers': module_headers})['data']
-    sightings = get_observables(response, 'Qualys IOC')
+    sightings = get_observables(response_from_all_modules, MODULE_NAME)
 
-    # Check respond data
-    assert sightings['categories'] == ['Qualys', 'Search']
-    assert sightings['module'] == 'Qualys IOC'
+    assert sightings['module'] == MODULE_NAME
     assert sightings['module_instance_id']
     assert sightings['module_type_id']
     assert sightings['description']
     assert sightings['id'] == (
         f'ref-qualys-search-{observable_type}-{observable}')
-    assert sightings['url']
-    assert sightings['title']
-    assert sightings['categories']
+    assert sightings['url'].startswith(
+        'https://qualysguard.qg3.apps.qualys.com')
+    assert sightings['title'] == (
+        f'Search for this '
+        f'{OBSERVABLE_HUMAN_READABLE_NAME[observable_type]}'
+    )
+    assert sightings['categories'] == ['Qualys', 'Search']
 
 
 @pytest.mark.parametrize(
@@ -79,26 +87,20 @@ def test_positive_enrich_observe_observables_sightings(
 
     Importance: Critical
     """
-
-    confidence_and_severity = [
-        'High', 'Info', 'Low', 'Medium', 'None', 'Unknown'
-    ]
-    # Get sightings
     observables = [{"value": observable, "type": observable_type}]
     response_from_all_modules = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers})['data']
     response_from_qualys_module = get_observables(
-        response_from_all_modules, 'Qualys IOC')
-    assert response_from_qualys_module['module'] == 'Qualys IOC'
+        response_from_all_modules, MODULE_NAME)
+
+    assert response_from_qualys_module['module'] == MODULE_NAME
     assert response_from_qualys_module['module_instance_id']
     assert response_from_qualys_module['module_type_id']
 
     sightings = response_from_qualys_module['data']['sightings']
-
     assert len(sightings['docs']) > 0
 
-    # Check respond data
     for sighting in sightings['docs']:
         assert sighting['description']
         assert sighting['schema_version']
@@ -109,21 +111,25 @@ def test_positive_enrich_observe_observables_sightings(
                 assert relation['related']['type'] == observable_type
 
         assert sighting['observables'] == observables
-        assert sighting['observed_time']['start_time']
-        assert sighting['id']
+        assert sighting['observed_time']['start_time'] == (
+            sighting['observed_time']['end_time'])
+        assert sighting['id'].startswith('transient:sighting-')
         assert sighting['type'] == 'sighting'
         assert sighting['count'] == 1
-        assert sighting['source'] == 'Qualys IOC'
+        assert sighting['source'] == MODULE_NAME
         assert sighting['external_ids']
-        assert sighting['confidence'] in confidence_and_severity
-        assert sighting['severity'] in confidence_and_severity
+        assert sighting['confidence'] == CONFIDENCE
+        assert sighting['severity'] in SEVERITY
         assert sighting['sensor'] == 'endpoint'
         assert sighting['data']
         assert 'external_references' in sighting
 
-        assert sighting['targets'][0]['type'] == 'endpoint'
-        assert sighting['targets'][0]['observables']
-        assert sighting['targets'][0]['observed_time']['start_time']
-        assert sighting['targets'][0]['os']
+        for target in sighting['targets']:
+            assert target['type'] == 'endpoint'
+            assert target['observables']
+            assert target['observed_time']['start_time'] == (
+                target['observed_time']['end_time']
+            )
+            assert target['os']
 
-    assert sightings['count'] == len(sightings['docs'])
+    assert sightings['count'] == len(sightings['docs']) <= CTR_ENTITIES_LIMIT

@@ -8,3 +8,4 @@ OBSERVABLE_DICT = {
     'C:\\Windows\\SYSTEM32\\ntdll.dll': 'file_path',
     'photoview1sp.jpg': 'file_name',
 }
+MODULE_NAME = 'Qualys IOC'

@@ -18,8 +18,8 @@ from tests.functional.tests.constants import MODULE_NAME
 def test_positive_smoke_empty_observables(
         module_headers, observable, observable_type):
     """Perform testing for enrich observe observables endpoint to check that
-     observable, on which Qualys doesn't have information, will
-     return empty data
+     observable, on which Qualys doesn't have information, will return empty
+     data
 
     ID: CCTRI-1707-2af2e5ec-d6bd-4a9b-83c1-5cb78786f145
 
@@ -31,7 +31,7 @@ def test_positive_smoke_empty_observables(
 
     Importance: Critical
     """
-    observables = [{"value": observable, "type": observable_type}, ]
+    observables = [{"value": observable, "type": observable_type}]
     response_from_all_modules = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers}

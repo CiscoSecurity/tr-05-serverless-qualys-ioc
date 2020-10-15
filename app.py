@@ -18,6 +18,24 @@ app.register_blueprint(respond.api)
 def handle_http(ex: HTTPError):
     code = ex.response.status_code
 
+    possible_detailed_errors = {
+        HTTPStatus.TOO_MANY_REQUESTS: {
+            "code": 'too many requests',
+            "message": 'Too many requests to Qualys IOC '
+                       'have been made. '
+                       'Please try again later.'
+        },
+        HTTPStatus.UNAUTHORIZED: {
+            "code": "access denied",
+            "message": "Access to Qualys IOC denied."
+        },
+        HTTPStatus.SERVICE_UNAVAILABLE: {
+            "code": 'service unavailable',
+            "message": 'Service temporarily unavailable. '
+                       'Please try again later.'
+        }
+    }
+
     def empty():
         return jsonify({})
 
@@ -27,24 +45,15 @@ def handle_http(ex: HTTPError):
         if hasattr(ex, 'data'):
             payload.update(ex.data)
 
+        app.logger.error(payload)
+
         return jsonify(payload)
 
-    if code == HTTPStatus.BAD_REQUEST:
+    if code in (HTTPStatus.BAD_REQUEST, HTTPStatus.NOT_FOUND):
         return empty()
-    if code == HTTPStatus.NOT_FOUND:
-        return empty()
-    if code == HTTPStatus.TOO_MANY_REQUESTS:
-        return error(code='too many requests',
-                     message='Too many requests to Qualys IOC '
-                             'have been made. '
-                             'Please try again later.')
-    if code == HTTPStatus.UNAUTHORIZED:
-        return error(code='access denied',
-                     message='Access to Qualys IOC denied.')
-    if code == HTTPStatus.SERVICE_UNAVAILABLE:
-        return error(code='service unavailable',
-                     message='Service temporarily unavailable. '
-                             'Please try again later.')
+
+    if code in possible_detailed_errors:
+        return error(**possible_detailed_errors[code])
 
     return handle_any(ex)
 
@@ -64,6 +73,8 @@ def handle_ssl(ex: SSLError):
         ]
     }
 
+    app.logger.error(payload)
+
     return jsonify(payload)
 
 
@@ -81,6 +92,8 @@ def handle_any(ex: Exception):
 
     if hasattr(ex, 'data'):
         payload.update(ex.data)
+
+    app.logger.error(payload)
 
     return jsonify(payload)
 

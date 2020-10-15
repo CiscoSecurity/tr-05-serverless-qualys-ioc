@@ -45,7 +45,7 @@ def handle_http(ex: HTTPError):
         return error(code='service unavailable',
                      message='Service temporarily unavailable. '
                              'Please try again later.')
-
+    print("test")
     return handle_any(ex)
 
 

@@ -43,7 +43,7 @@ def handle_http(ex: HTTPError):
                      message='Access to Qualys IOC denied.')
     if code == HTTPStatus.SERVICE_UNAVAILABLE:
         return error(code='service unavailable',
-                     message='Service temporarily unavailable. '
+                     message='Serqwevice temporarily unavailable. '
                              'Please try again later.')
 
     return handle_any(ex)

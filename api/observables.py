@@ -2,7 +2,9 @@ from abc import ABCMeta, abstractmethod
 from itertools import chain
 from typing import Optional, Dict, Any, Iterable, List
 from urllib.parse import quote
-from uuid import uuid4
+from uuid import uuid4, uuid5
+
+from flask import current_app
 
 from . import qualys
 
@@ -136,13 +138,19 @@ class Observable(metaclass=ABCMeta):
             },
         })
 
+    @staticmethod
+    def get_transient_id(entity_type, base_value=None):
+        uuid = (uuid5(current_app.config['NAMESPACE_BASE'], base_value)
+                if base_value else uuid4())
+        return f'transient:{entity_type}-{uuid}'
+
     @classmethod
     def _indicator(cls, event: Dict[str, Any]) \
             -> Dict[str, Any]:
         """Constructs a single CTIM indicator from a Qualys IOC event."""
 
         return clean({
-            'id': f'transient:indicator-{uuid4()}',
+            'id': cls.get_transient_id('indicator', event['id']),
             'type': 'indicator',
             'schema_version': cls.SCHEMA,
             'source': 'Qualys IOC',

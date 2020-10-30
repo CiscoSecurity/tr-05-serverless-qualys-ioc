@@ -37,9 +37,8 @@ def test_positive_smoke_empty_observables(
         **{'headers': module_headers}
     )
 
-    qualys_data = response_from_all_modules['data']
-
-    response_from_qualys_module = get_observables(qualys_data, MODULE_NAME)
+    response_from_qualys_module = get_observables(response_from_all_modules,
+                                                  MODULE_NAME)
 
     assert response_from_qualys_module['module'] == MODULE_NAME
     assert response_from_qualys_module['module_instance_id']

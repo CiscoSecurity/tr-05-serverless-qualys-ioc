@@ -42,7 +42,9 @@ def test_positive_relay_refer_observables_sightings(
     observables = [{'value': observable, 'type': observable_type}]
     response_from_all_modules = enrich_refer_observables(
         payload=observables,
-        **{'headers': module_headers})['data']
+        **{'headers': module_headers}
+    )
+
     sightings = get_observables(response_from_all_modules, MODULE_NAME)
 
     assert sightings['module'] == MODULE_NAME
@@ -90,7 +92,8 @@ def test_positive_enrich_observe_observables_sightings(
     observables = [{"value": observable, "type": observable_type}]
     response_from_all_modules = enrich_observe_observables(
         payload=observables,
-        **{'headers': module_headers})['data']
+        **{'headers': module_headers})
+
     response_from_qualys_module = get_observables(
         response_from_all_modules, MODULE_NAME)
 

@@ -37,7 +37,9 @@ def test_positive_enrich_observe_observables_relationships(
     observables = [{"value": observable, "type": observable_type}]
     response_from_all_modules = enrich_observe_observables(
         payload=observables,
-        **{'headers': module_headers})['data']
+        **{'headers': module_headers}
+    )
+
     response_from_qualys_ioc = get_observables(
         response_from_all_modules, MODULE_NAME)
 

@@ -4,7 +4,7 @@ from flask import Flask, jsonify
 from requests import HTTPError
 from requests.exceptions import SSLError
 
-from api import health, enrich, respond
+from api import health, enrich, respond, version
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -12,6 +12,7 @@ app.config.from_object('config.Config')
 app.register_blueprint(health.api)
 app.register_blueprint(enrich.api)
 app.register_blueprint(respond.api)
+app.register_blueprint(version.api)
 
 
 @app.errorhandler(HTTPError)

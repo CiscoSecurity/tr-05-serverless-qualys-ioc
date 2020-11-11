@@ -2,7 +2,7 @@ import os
 from typing import Any
 from uuid import NAMESPACE_X500
 
-from version import VERSION
+from __version__ import VERSION
 
 
 def positive_int(value: Any, default: int) -> int:

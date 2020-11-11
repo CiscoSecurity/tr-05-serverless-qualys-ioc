@@ -54,8 +54,8 @@ class Observable(metaclass=ABCMeta):
 
         for active in [True, False]:
             amount = limit - len(data.get('sightings', []))
-            events = client.events(quote(self.filter(observable)),
-                                   active, amount)
+            events = client.events(active, amount,
+                                   quote(self.filter(observable)))
 
             # Map received events to CTIM objects
             # and append them to the result.

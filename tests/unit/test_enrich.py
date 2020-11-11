@@ -2,7 +2,7 @@ from http import HTTPStatus
 from unittest.mock import patch, MagicMock
 
 from pytest import fixture
-from requests.exceptions import SSLError
+from requests.exceptions import SSLError, ConnectionError
 
 
 def headers(jwt):
@@ -37,7 +37,7 @@ def test_refer_call_success(
     assert response.json == refer_expected_payload
 
 
-OBSERVE_OBSERVABLES_ROUT = '/observe/observables'
+OBSERVE_OBSERVABLES_ROUTE = '/observe/observables'
 TOKEN = 'token'
 
 
@@ -50,7 +50,8 @@ def test_enrich_call_with_invalid_json(
         client, valid_jwt, invalid_json, invalid_json_expected_payload
 ):
     response = client.post(
-        OBSERVE_OBSERVABLES_ROUT, headers=headers(valid_jwt), json=invalid_json
+        OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
+        json=invalid_json
     )
 
     assert response.status_code == HTTPStatus.OK
@@ -67,7 +68,7 @@ def test_enrich_call_success(
         get_mock.return_value = qualys_response_events
 
         response = client.post(
-            OBSERVE_OBSERVABLES_ROUT, headers=headers(valid_jwt),
+            OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
             json=valid_json
         )
 
@@ -89,13 +90,30 @@ def test_enrich_call_with_ssl_error(
         get_mock.side_effect = SSLError(mock_exception)
 
         response = client.post(
-            OBSERVE_OBSERVABLES_ROUT, headers=headers(valid_jwt),
+            OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
             json=valid_json
         )
 
         assert response.status_code == HTTPStatus.OK
         assert response.json == sslerror_expected_payload
         token_mock.assert_called_once()
+
+
+def test_enrich_call_with_connection_error(
+        client, valid_json, valid_jwt, connection_error_expected_payload
+):
+    with patch('requests.post') as token_mock, \
+            patch('requests.get') as get_mock:
+        token_mock.return_value = TOKEN
+        get_mock.side_effect = ConnectionError()
+
+        response = client.post(
+            OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
+            json=valid_json
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        assert response.json == connection_error_expected_payload
 
 
 def test_enrich_call_with_http_error(
@@ -109,7 +127,7 @@ def test_enrich_call_with_http_error(
         get_mock.return_value = qualys_response_internal_server_error
 
         response = client.post(
-            OBSERVE_OBSERVABLES_ROUT, headers=headers(valid_jwt),
+            OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
             json=valid_json
         )
 
@@ -130,7 +148,7 @@ def test_enrich_call_success_with_extended_error_handling(
                                 qualys_response_internal_server_error]
 
         response = client.post(
-            OBSERVE_OBSERVABLES_ROUT, headers=headers(valid_jwt),
+            OBSERVE_OBSERVABLES_ROUTE, headers=headers(valid_jwt),
             json=[*valid_json, {'type': 'domain', 'value': 'google.com'}]
         )
 

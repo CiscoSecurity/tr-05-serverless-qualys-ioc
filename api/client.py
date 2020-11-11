@@ -3,7 +3,7 @@ from typing import Dict
 
 import requests
 from flask import session, current_app
-from requests.exceptions import SSLError
+from requests.exceptions import SSLError, ConnectionError, MissingSchema
 
 from api.errors import (
     CriticalResponseError,
@@ -16,7 +16,7 @@ agent = ('Cisco Threat Response Integrations '
          '<tr-integrations-support@cisco.com>')
 
 
-def events(filter_: str, active: bool, amount: int):
+def events(active: bool, amount: int, filter_: str = None):
     """Performs a request to Qualys to search
     for events with the specified filter."""
 
@@ -25,13 +25,48 @@ def events(filter_: str, active: bool, amount: int):
         return []
 
     api = current_app.config['API_URL']
-    url = f'{api}/ioc/events' \
-          f'?filter={filter_}' \
-          f'&pageSize={amount}'
+    url = f'{api}/ioc/events?pageSize={amount}'
+
+    if filter_:
+        url += f'&filter={filter_}'
     if active:
         url += '&state=true'
 
     return get_data(url)
+
+
+def get_data(url):
+    try:
+        response = requests.get(url, headers=headers())
+
+        # Refresh the token if expired.
+        if response.status_code == HTTPStatus.UNAUTHORIZED:
+            response = requests.get(url, headers=headers(fresh=True))
+
+        if response.ok:
+            return response.json()
+
+        if response.status_code in (
+                HTTPStatus.NOT_FOUND, HTTPStatus.BAD_REQUEST
+        ):
+            return {}
+
+        raise CriticalResponseError(response)
+
+    except SSLError as error:
+        raise QualysSSLError(error)
+    except (ConnectionError, MissingSchema):
+        raise QualysConnectionError(current_app.config['API_URL'])
+
+
+def headers(fresh: bool = False) -> Dict[str, str]:
+    """Returns headers with an authorization token for Qualys."""
+    return {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token(fresh),
+        'Content-Type': 'application/json',
+        'User-Agent': agent
+    }
 
 
 def token(fresh: bool = False) -> str:
@@ -59,37 +94,3 @@ def token(fresh: bool = False) -> str:
         session['token'] = response.text
 
     return session['token']
-
-
-def headers(fresh: bool = False) -> Dict[str, str]:
-    """Returns headers with an authorization token for Qualys."""
-    return {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token(fresh),
-        'Content-Type': 'application/json',
-        'User-Agent': agent
-    }
-
-
-def get_data(url):
-    try:
-        response = requests.get(url, headers=headers())
-
-        # Refresh the token if expired.
-        if response.status_code == HTTPStatus.UNAUTHORIZED:
-            response = requests.get(url, headers=headers(fresh=True))
-
-        if response.ok:
-            return response.json()
-
-        if response.status_code in (
-                HTTPStatus.NOT_FOUND, HTTPStatus.BAD_REQUEST
-        ):
-            return {}
-
-        raise CriticalResponseError(response)
-
-    except SSLError as error:
-        raise QualysSSLError(error)
-    except ConnectionError:
-        raise QualysConnectionError(current_app.config['API_URL'])

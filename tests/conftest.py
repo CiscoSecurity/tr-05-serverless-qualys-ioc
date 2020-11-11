@@ -19,6 +19,7 @@ def secret_key():
 @fixture(scope='session')
 def client(secret_key):
     app.secret_key = secret_key
+    app.api_url = 'XXX'
 
     app.testing = True
 
@@ -115,6 +116,20 @@ def sslerror_expected_payload():
                 'code': 'unknown',
                 'message': 'Unable to verify SSL certificate:'
                            ' Self signed certificate',
+                'type': 'fatal'
+            }
+        ]
+    }
+
+
+@fixture(scope='module')
+def connection_error_expected_payload():
+    return {
+        'errors': [
+            {
+                'code': 'connection error',
+                'message': 'Unable to connect Microsoft Qualys Security,'
+                           ' validate the configured API URL: ',
                 'type': 'fatal'
             }
         ]

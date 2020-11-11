@@ -92,7 +92,7 @@ def test_mutex_refer():
 
 
 def events(path):
-    def patched(_, active, __):
+    def patched(active, _, __):
         with open(path, 'r') as file:
             data = json.loads(file.read())
 

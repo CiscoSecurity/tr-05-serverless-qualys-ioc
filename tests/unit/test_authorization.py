@@ -9,7 +9,7 @@ from .utils import headers
 
 
 def routes():
-    # ToDo: yield '/health'
+    yield '/health'
     yield '/observe/observables'
 
 

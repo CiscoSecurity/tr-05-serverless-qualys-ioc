@@ -10,7 +10,7 @@ from tests.functional.tests.constants import (
 
 @pytest.mark.parametrize(
     'observable,observable_type,disposition_name,disposition',
-    (('701fb8ed9d1f72c901e207dd01b481266be8458f6e03750c1a139c901f2995fa',
+    (('600672e9164d0201ebb0349111994910105ad61386ca58c5d67556efa66f35c6',
      'sha256', 'Unknown', 5),
      ('a23-38-112-137.deploy.static.akamaitechnologies.com', 'domain', 'Clean',
      1),
@@ -18,7 +18,7 @@ from tests.functional.tests.constants import (
      ('MSFTHISTORY!', 'mutex', 'Clean', 1),
      (r'C:\Users\User01\Downloads\Malware', 'file_path', 'Malicious', 2),
      ('buzus.exe', 'file_name', 'Malicious', 2),
-     ('415e5cc23e106483711abe70ad78c8e2', 'md5', 'Unknown', 5))
+     ('751b9ce3dc2dd9e3de156da983b2b3b4', 'md5', 'Unknown', 5))
 )
 def test_positive_enrich_observe_observables_judgements(
         module_headers, observable, observable_type, disposition_name,

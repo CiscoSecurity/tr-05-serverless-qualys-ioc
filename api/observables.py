@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
 from itertools import chain
 from typing import Optional, Dict, Any, Iterable, List
 from urllib.parse import quote
@@ -6,7 +7,7 @@ from uuid import uuid4, uuid5
 
 from flask import current_app
 
-from . import qualys
+from . import client
 
 
 class Observable(metaclass=ABCMeta):
@@ -46,19 +47,14 @@ class Observable(metaclass=ABCMeta):
     def observe(self, observable: str, limit: int) -> Dict[str, Any]:
         """Retrieves objects (sightings, verdicts, etc.) for an observable."""
 
-        data = {}
+        data = defaultdict(list)
 
         def truncate(name, objects):
-            return objects[:limit - data.get(name, {}).get('count', 0)]
-
-        def append(name, objects):
-            data.setdefault(name, {})
-            data[name]['docs'] = data[name].get('docs', []) + objects
-            data[name]['count'] = len(data[name]['docs'])
+            return objects[:limit - len(data.get(name, []))]
 
         for active in [True, False]:
-            amount = limit - data.get('sightings', {}).get('count', 0)
-            events = qualys.events(quote(self.filter(observable)),
+            amount = limit - len(data.get('sightings', []))
+            events = client.events(quote(self.filter(observable)),
                                    active, amount)
 
             # Map received events to CTIM objects
@@ -79,10 +75,10 @@ class Observable(metaclass=ABCMeta):
                     self._relationships(sightings, 'sighting-of', indicators),
                 ))
 
-                append('sightings', sightings)
-                append('indicators', indicators)
-                append('judgements', judgements)
-                append('relationships', relationships)
+                data['sightings'].extend(sightings)
+                data['indicators'].extend(indicators)
+                data['judgements'].extend(judgements)
+                data['relationships'].extend(relationships)
 
         return data
 

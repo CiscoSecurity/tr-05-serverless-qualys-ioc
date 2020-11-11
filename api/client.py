@@ -2,10 +2,15 @@ from http import HTTPStatus
 from typing import Dict
 
 import requests
-from authlib.jose import jwt
-from flask import session, current_app, request
+from flask import session, current_app
+from requests.exceptions import SSLError
 
-from .url import join
+from api.errors import (
+    CriticalResponseError,
+    QualysConnectionError,
+    QualysSSLError
+)
+from api.utils import url_join, get_credentials
 
 agent = ('Cisco Threat Response Integrations '
          '<tr-integrations-support@cisco.com>')
@@ -26,32 +31,19 @@ def events(filter_: str, active: bool, amount: int):
     if active:
         url += '&state=true'
 
-    response = requests.get(url, headers=headers())
-
-    # Refresh the token if expired.
-    if response.status_code == HTTPStatus.UNAUTHORIZED.value:
-        response = requests.get(url, headers=headers(fresh=True))
-
-    response.raise_for_status()
-
-    return response.json()
+    return get_data(url)
 
 
 def token(fresh: bool = False) -> str:
     """Returns an authorization token for Qualys."""
 
     if fresh or 'token' not in session:
-        scheme, payload = request.headers['Authorization'].split(None, 1)
-
-        if scheme.lower() != 'bearer':
-            raise ValueError('Expected the scheme to be "Bearer".')
-
-        credentials = jwt.decode(payload, current_app.config['SECRET_KEY'])
+        credentials = get_credentials()
 
         username = credentials['user']
         password = credentials['pass']
 
-        url = join(current_app.config['API_URL'], '/auth')
+        url = url_join(current_app.config['API_URL'], '/auth')
         content = 'application/x-www-form-urlencoded'
 
         response = requests.post(url,
@@ -60,7 +52,9 @@ def token(fresh: bool = False) -> str:
                                       b'token=true',
                                  headers={'Content-Type': content,
                                           'User-Agent': agent})
-        response.raise_for_status()
+
+        if not response.ok:
+            raise CriticalResponseError(response)
 
         session['token'] = response.text
 
@@ -75,3 +69,27 @@ def headers(fresh: bool = False) -> Dict[str, str]:
         'Content-Type': 'application/json',
         'User-Agent': agent
     }
+
+
+def get_data(url):
+    try:
+        response = requests.get(url, headers=headers())
+
+        # Refresh the token if expired.
+        if response.status_code == HTTPStatus.UNAUTHORIZED:
+            response = requests.get(url, headers=headers(fresh=True))
+
+        if response.ok:
+            return response.json()
+
+        if response.status_code in (
+                HTTPStatus.NOT_FOUND, HTTPStatus.BAD_REQUEST
+        ):
+            return {}
+
+        raise CriticalResponseError(response)
+
+    except SSLError as error:
+        raise QualysSSLError(error)
+    except ConnectionError:
+        raise QualysConnectionError(current_app.config['API_URL'])

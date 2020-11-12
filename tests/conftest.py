@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 
 from authlib.jose import jwt
 from pytest import fixture
-from requests import HTTPError
 
+from api.errors import INVALID_ARGUMENT
 from app import app
 
 
@@ -19,6 +19,7 @@ def secret_key():
 @fixture(scope='session')
 def client(secret_key):
     app.secret_key = secret_key
+    app.api_url = 'XXX'
 
     app.testing = True
 
@@ -60,30 +61,13 @@ def invalid_jwt(valid_jwt):
 
 
 def qualys_api_response_mock(status_code, text=None, json_=None):
-    def raise_for_status(self):
-        http_error_msg = ''
-        if 400 <= self.status_code < 500:
-            http_error_msg = u'%s Client Error: %s for url: %s' % (
-                self.status_code, 'reason', self.url
-            )
-
-        elif 500 <= self.status_code < 600:
-            http_error_msg = u'%s Server Error: %s for url: %s' % (
-                self.status_code, 'reason', self.url
-            )
-
-        if http_error_msg:
-            raise HTTPError(http_error_msg, response=self)
-
     mock_response = MagicMock()
 
     mock_response.status_code = status_code
     mock_response.ok = status_code == HTTPStatus.OK
 
     mock_response.text = text
-    mock_response.json = json_ or MagicMock()
-
-    mock_response.raise_for_status = lambda: raise_for_status(mock_response)
+    mock_response.json = lambda: json_ or {}
 
     return mock_response
 
@@ -92,14 +76,17 @@ def qualys_api_response_mock(status_code, text=None, json_=None):
 def qualys_response_unauthorized_creds(secret_key):
     return qualys_api_response_mock(
         HTTPStatus.UNAUTHORIZED,
-        json_=lambda: {'detail': 'Error: Bad API key'}
+        json_={
+            'authentication_exceptions': ['InvalidCredentialsException']
+        }
     )
 
 
 @fixture(scope='session')
 def qualys_response_internal_server_error(secret_key):
     return qualys_api_response_mock(
-        HTTPStatus.INTERNAL_SERVER_ERROR
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+        text='Internal server error'
     )
 
 
@@ -109,7 +96,7 @@ def qualys_response_events(secret_key):
         data = json.loads(file.read())
         return qualys_api_response_mock(
             HTTPStatus.OK,
-            json_=lambda: data['input']
+            json_=data['input']
         )
 
 
@@ -136,27 +123,43 @@ def sslerror_expected_payload():
 
 
 @fixture(scope='module')
-def fatal_error_expected_payload():
+def connection_error_expected_payload():
     return {
         'errors': [
             {
-                'type': 'fatal',
-                'code': 'oops',
-                'message': 'Something went wrong.'
+                'code': 'connection error',
+                'message': 'Unable to connect Microsoft Qualys Security,'
+                           ' validate the configured API URL: ',
+                'type': 'fatal'
             }
         ]
     }
 
 
 @fixture(scope='module')
-def unauthorised_creds_expected_payload():
+def internal_server_error_expected_payload():
     return {
         'errors': [
             {
-                'code': 'access denied',
-                'message': 'Access to Qualys IOC denied.',
-                'type': 'fatal'
+                'type': 'fatal',
+                'code': 'unknown',
+                'message': 'Unexpected response from Qualys IOC:'
+                           ' Internal server error'
             }
+        ]
+    }
+
+
+@fixture(scope='module')
+def invalid_json_expected_payload():
+    return {
+        'errors': [
+            {
+                'code': INVALID_ARGUMENT,
+                'message':
+                    'Invalid JSON payload received. {"0": {"value": '
+                    '["Missing data for required field."]}}',
+                'type': 'fatal'}
         ]
     }
 

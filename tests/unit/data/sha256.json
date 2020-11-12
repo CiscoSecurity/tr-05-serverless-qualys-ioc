@@ -48,8 +48,7 @@
     }
   ],
   "output": {
-    "sightings": {
-      "docs":[
+    "sightings": [
       {
         "confidence": "High",
         "count": 1,
@@ -163,10 +162,7 @@
         }
       }
       ],
-      "count": 1
-    },
-    "judgements": {
-      "docs": [
+    "judgements": [
         {
           "confidence": "High",
           "disposition": 2,
@@ -188,10 +184,7 @@
           "valid_time": {}
         }
       ],
-      "count": 1
-    },
-    "indicators": {
-      "docs": [
+    "indicators": [
         {
           "type": "indicator",
           "schema_version": "1.0.17",
@@ -205,10 +198,7 @@
           "confidence": "High"
         }
       ],
-      "count": 1
-    },
-    "relationships": {
-      "docs": [
+    "relationships": [
         {
           "type": "relationship",
           "schema_version": "1.0.17",
@@ -233,8 +223,6 @@
           "relationship_type": "sighting-of",
           "external_ids": []
         }
-      ],
-      "count": 3
-    }
+      ]
   }
 }

@@ -92,7 +92,7 @@ def test_mutex_refer():
 
 
 def events(path):
-    def patched(_, active, __):
+    def patched(active, _, __):
         with open(path, 'r') as file:
             data = json.loads(file.read())
 
@@ -101,7 +101,7 @@ def events(path):
     return patched
 
 
-@patch('api.qualys.events', events('tests/unit/data/sha256.json'))
+@patch('api.client.events', events('tests/unit/data/sha256.json'))
 def test_map():
     with open('tests/unit/data/sha256.json', 'r') as file:
         data = json.loads(file.read())
@@ -113,7 +113,7 @@ def test_map():
     assert_mapped_correctly(output, data['output'])
 
 
-@patch('api.qualys.events', events('tests/unit/data/file_name.json'))
+@patch('api.client.events', events('tests/unit/data/file_name.json'))
 def test_limits():
     with open('tests/unit/data/file_name.json', 'r') as file:
         data = json.loads(file.read())
@@ -129,11 +129,9 @@ def assert_mapped_correctly(a, b):
 
     for key in a.keys():
         assert key in b
-        assert len(a[key]['docs']) == len(b[key]['docs'])
-        assert len(a[key]['docs']) == a[key]['count']
-        assert a[key]['count'] == b[key]['count']
+        assert len(a[key]) == len(b[key])
 
-        for x, y in zip(a[key]['docs'], b[key]['docs']):
+        for x, y in zip(a[key], b[key]):
             assert x.pop('id').startswith('transient:')
 
             if key == 'relationships':

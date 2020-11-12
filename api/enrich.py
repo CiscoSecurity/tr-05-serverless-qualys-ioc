@@ -1,57 +1,53 @@
+from functools import partial
 from urllib.parse import quote
 
-from flask import Blueprint, request, jsonify, current_app
-from werkzeug.exceptions import BadRequest
+from flask import Blueprint, current_app, g
 
-from . import schema
 from .observables import Observable
+from .schema import ObservableSchema
+from .utils import get_json, jsonify_result, jsonify_data
 
 api = Blueprint('enrich', __name__)
+
+get_observables = partial(get_json, schema=ObservableSchema(many=True))
 
 
 @api.route('/observe/observables', methods=['POST'])
 def observe():
-    observables = json(request, schema.observables)
+    observables = get_observables()
 
-    data = {}
     limit = current_app.config['CTR_ENTITIES_LIMIT']
 
-    try:
-        for pair in observables:
-            type_ = pair['type']
-            value = pair['value']
+    g.sightings = []
+    g.indicators = []
+    g.judgements = []
+    g.relationships = []
 
-            observable = Observable.of(type_)
-            if observable is None:
-                continue
+    for pair in observables:
+        type_ = pair['type']
+        value = pair['value']
 
-            for name, objects in observable.observe(value, limit).items():
-                if objects['count'] == 0:
-                    continue
+        observable = Observable.of(type_)
+        if observable is None:
+            continue
 
-                data.setdefault(name, {})
-                data[name].setdefault('docs', [])
-                data[name].setdefault('count', 0)
+        observed_data = observable.observe(value, limit)
+        g.sightings.extend(observed_data["sightings"])
+        g.indicators.extend(observed_data["indicators"])
+        g.judgements.extend(observed_data["judgements"])
+        g.relationships.extend(observed_data["relationships"])
 
-                data[name]['docs'] += objects['docs']
-                data[name]['count'] += objects['count']
-    except Exception as exception:
-        if data:
-            setattr(exception, 'data', {'data': data})
-
-        raise
-
-    return jsonify({'data': data})
+    return jsonify_result()
 
 
 @api.route('/deliberate/observables', methods=['POST'])
 def deliberate():
-    return jsonify({'data': {}})
+    return jsonify_data({})
 
 
 @api.route('/refer/observables', methods=['POST'])
 def refer():
-    observables = json(request, schema.observables)
+    observables = get_observables()
     result = []
 
     for pair in observables:
@@ -72,16 +68,4 @@ def refer():
             'categories': ['Search', 'Qualys']
         })
 
-    return jsonify({'data': result})
-
-
-def json(request_, schema_):
-    """Parses the body of a request as JSON according to a provided schema."""
-
-    body = request_.get_json(force=True, silent=True, cache=False)
-    error = schema_.validate(body) or None
-
-    if error is not None:
-        raise BadRequest('Invalid JSON format.')
-
-    return body
+    return jsonify_data(result)

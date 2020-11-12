@@ -24,8 +24,7 @@ class Config:
 
     SECRET_KEY = os.environ.get('SECRET_KEY', None)
 
-    CTR_ENTITIES_LIMIT = \
-        positive_int(os.environ.get('CTR_ENTITIES_LIMIT'),
-                     default=100)
+    CTR_ENTITIES_LIMIT = positive_int(os.environ.get('CTR_ENTITIES_LIMIT'),
+                                      default=100)
 
     NAMESPACE_BASE = NAMESPACE_X500

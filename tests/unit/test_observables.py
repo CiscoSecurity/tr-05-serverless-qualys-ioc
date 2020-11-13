@@ -129,7 +129,8 @@ def assert_mapped_correctly(a, b):
 
     for key in a.keys():
         assert key in b
-        assert len(a[key]) == len(b[key])
+        if key not in ('indicators', 'relationships'):
+            assert len(a[key]) == len(b[key])
 
         for x, y in zip(a[key], b[key]):
             assert x.pop('id').startswith('transient:')

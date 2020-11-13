@@ -772,22 +772,6 @@
           "source_uri": "",
           "relationship_type": "sighting-of",
           "external_ids": []
-        },
-        {
-          "type": "relationship",
-          "schema_version": "1.0.17",
-          "source": "Qualys IOC",
-          "source_uri": "",
-          "relationship_type": "based-on",
-          "external_ids": []
-        },
-        {
-          "type": "relationship",
-          "schema_version": "1.0.17",
-          "source": "Qualys IOC",
-          "source_uri": "",
-          "relationship_type": "sighting-of",
-          "external_ids": []
         }
       ]
   }

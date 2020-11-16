@@ -63,7 +63,7 @@ class Observable(metaclass=ABCMeta):
                 sightings = [self._sighting(event, observable, active)]
                 sightings = truncate('sightings', sightings)
 
-                if event.get('score'):
+                if event.get('score') is not None:
                     indicators = [self._indicator(event)]
                     indicators = truncate('indicators', indicators)
                 else:

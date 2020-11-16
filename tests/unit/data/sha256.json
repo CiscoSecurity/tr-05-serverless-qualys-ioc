@@ -187,6 +187,7 @@
     "indicators": [
         {
           "type": "indicator",
+          "title": "Malicious File event",
           "schema_version": "1.0.17",
           "source": "Qualys IOC",
           "producer": "Qualys IOC",

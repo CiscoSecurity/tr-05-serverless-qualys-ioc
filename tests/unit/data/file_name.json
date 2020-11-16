@@ -616,6 +616,7 @@
     "indicators": [
         {
           "type": "indicator",
+          "title": "Known Good",
           "schema_version": "1.0.17",
           "source": "Qualys IOC",
           "producer": "Qualys IOC",
@@ -626,20 +627,9 @@
           ],
           "confidence": "High"
         },
-        {
+      {
           "type": "indicator",
-          "schema_version": "1.0.17",
-          "source": "Qualys IOC",
-          "producer": "Qualys IOC",
-          "severity": "Unknown",
-          "valid_time": {},
-          "external_ids": [
-            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_3480527008110556743"
-          ],
-          "confidence": "High"
-        },
-        {
-          "type": "indicator",
+          "title": "Known Good",
           "schema_version": "1.0.17",
           "source": "Qualys IOC",
           "producer": "Qualys IOC",
@@ -647,6 +637,19 @@
           "valid_time": {},
           "external_ids": [
             "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6191535533943567619"
+          ],
+          "confidence": "High"
+        },
+        {
+          "type": "indicator",
+          "title": "Known Good",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "producer": "Qualys IOC",
+          "severity": "None",
+          "valid_time": {},
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6971646820704658234"
           ],
           "confidence": "High"
         }
@@ -744,22 +747,6 @@
           "source": "Qualys IOC",
           "source_uri": "",
           "relationship_type": "based-on",
-          "external_ids": []
-        },
-        {
-          "type": "relationship",
-          "schema_version": "1.0.17",
-          "source": "Qualys IOC",
-          "source_uri": "",
-          "relationship_type": "based-on",
-          "external_ids": []
-        },
-        {
-          "type": "relationship",
-          "schema_version": "1.0.17",
-          "source": "Qualys IOC",
-          "source_uri": "",
-          "relationship_type": "sighting-of",
           "external_ids": []
         },
         {

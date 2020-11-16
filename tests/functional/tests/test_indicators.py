@@ -5,7 +5,8 @@ from tests.functional.tests.constants import (
     MODULE_NAME,
     CTR_ENTITIES_LIMIT,
     SEVERITY,
-    CONFIDENCE
+    CONFIDENCE,
+    TITLE
 )
 
 
@@ -48,18 +49,21 @@ def test_positive_enrich_observe_observables_indicators(
     assert response_from_qualys_ioc['module_instance_id']
     assert response_from_qualys_ioc['module_type_id']
 
-    indicators = response_from_qualys_ioc['data']['indicators']
-    assert len(indicators['docs']) > 0
+    indicators = response_from_qualys_ioc['data'].get('indicators')
+    if indicators:
+        assert len(indicators['docs']) > 0
 
-    for indicator in indicators['docs']:
-        assert indicator['id'].startswith('transient:indicator-')
-        assert 'valid_time' in indicator
-        assert indicator['producer'] == MODULE_NAME
-        assert indicator['schema_version']
-        assert indicator['type'] == 'indicator'
-        assert indicator['source'] == MODULE_NAME
-        assert indicator['severity'] in SEVERITY
-        assert indicator['confidence'] == CONFIDENCE
-        assert indicator['external_ids']
+        for indicator in indicators['docs']:
+            assert indicator['id'].startswith('transient:indicator-')
+            assert 'valid_time' in indicator
+            assert indicator['producer'] == MODULE_NAME
+            assert indicator['schema_version']
+            assert indicator['type'] == 'indicator'
+            assert indicator['source'] == MODULE_NAME
+            assert indicator['severity'] in SEVERITY
+            assert indicator['title'] in TITLE
+            assert indicator['confidence'] == CONFIDENCE
+            assert indicator['external_ids']
 
-    assert indicators['count'] == len(indicators['docs']) <= CTR_ENTITIES_LIMIT
+        assert indicators['count'] == len(indicators['docs']) <= \
+            CTR_ENTITIES_LIMIT

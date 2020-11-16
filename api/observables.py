@@ -63,8 +63,11 @@ class Observable(metaclass=ABCMeta):
                 sightings = [self._sighting(event, observable, active)]
                 sightings = truncate('sightings', sightings)
 
-                indicators = [self._indicator(event)]
-                indicators = truncate('indicators', indicators)
+                if event.get('score') is not None:
+                    indicators = [self._indicator(event)]
+                    indicators = truncate('indicators', indicators)
+                else:
+                    indicators = []
 
                 judgements = self._judgements(event, observable)
                 judgements = truncate('judgements', judgements)
@@ -140,12 +143,30 @@ class Observable(metaclass=ABCMeta):
                 if base_value else uuid4())
         return f'transient:{entity_type}-{uuid}'
 
+    @staticmethod
+    def get_title(score: str) -> str:
+        titles = {
+            '0': 'Known Good',
+            '1': 'Remediated',
+            '2': 'Suspicious Low File event',
+            '3': 'Suspicious Low Process event',
+            '4': 'Suspicious Low Network event',
+            '5': 'Suspicious Medium File event',
+            '6': 'Suspicious Medium Process event',
+            '7': 'Suspicious Medium Network event',
+            '8': 'Malicious File event',
+            '9': 'Malicious Process event',
+            '10': 'Malicious Network event'
+        }
+        return titles[score]
+
     @classmethod
     def _indicator(cls, event: Dict[str, Any]) \
             -> Dict[str, Any]:
         """Constructs a single CTIM indicator from a Qualys IOC event."""
 
         return clean({
+            'title': cls.get_title(event['score']),
             'id': cls.get_transient_id('indicator', event['id']),
             'type': 'indicator',
             'schema_version': cls.SCHEMA,

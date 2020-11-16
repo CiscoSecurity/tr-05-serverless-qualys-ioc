@@ -1,3 +1,16 @@
+TITLE = (
+    'Known Good',
+    'Remediated',
+    'Suspicious Low File event',
+    'Suspicious Low Process event',
+    'Suspicious Low Network event',
+    'Suspicious Medium File event',
+    'Suspicious Medium Process event',
+    'Suspicious Medium Network event',
+    'Malicious File event',
+    'Malicious Process event',
+    'Malicious Network event'
+)
 MODULE_NAME = 'Qualys IOC'
 CONFIDENCE = 'High'
 SEVERITY = ('High', 'Info', 'Low', 'Medium', 'None', 'Unknown')

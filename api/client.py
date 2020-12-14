@@ -12,7 +12,7 @@ from api.errors import (
 )
 from api.utils import url_join, get_credentials
 
-agent = ('Cisco Threat Response Integrations '
+agent = ('SecureX Threat Response Integrations '
          '<tr-integrations-support@cisco.com>')
 
 

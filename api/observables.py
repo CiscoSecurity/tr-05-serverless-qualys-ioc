@@ -203,6 +203,11 @@ class Observable(metaclass=ABCMeta):
         judgements = []
 
         for indicator2 in get(event, '.indicator2') or []:
+
+            if cls.type() == 'sha256' and \
+                    observable not in indicator2.values():
+                continue
+
             verdict = indicator2.get('verdict')
 
             disposition_name = disposition_names.get(verdict) or 'Unknown'

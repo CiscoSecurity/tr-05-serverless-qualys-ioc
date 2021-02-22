@@ -48,7 +48,7 @@ def deliberate():
 @api.route('/refer/observables', methods=['POST'])
 def refer():
     observables = get_observables()
-    get_credentials()
+    _ = get_credentials()
     result = []
 
     for pair in observables:

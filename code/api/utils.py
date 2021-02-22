@@ -179,6 +179,6 @@ def positive_int(value: Any, default: int) -> int:
     try:
         value = int(value)
     except (ValueError, TypeError):
-        return default
+        return default if not default == '' else value
 
     return value if value > 0 else default

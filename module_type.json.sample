@@ -25,28 +25,28 @@
   "configuration_spec": [
     {
       "key": "custom_user",
-      "type": "user",
+      "type": "string",
       "label": "Username",
       "tooltip": "The Qualys IOC username",
       "required": true
     },
     {
       "key": "custom_pass",
-      "type": "pass",
+      "type": "password",
       "label": "Password",
       "tooltip": "The Qualys IOC password",
       "required": true
     },
     {
       "key": "custom_API_URL",
-      "type": "api_url",
+      "type": "string",
       "label": "API URL",
       "tooltip": "The Qualys IOC API URL",
       "required": true
     },
     {
       "key": "custom_PLATFORM_URL",
-      "type": "platform_url",
+      "type": "string",
       "label": "Platform URL",
       "tooltip": "The Qualys IOC platform URL",
       "required": true

@@ -1,0 +1,87 @@
+{
+  "title": "Qualys IOC",
+  "default_name": "Qualys IOC",
+  "short_description": "Qualys IOC enables threat hunting, detection of suspicious activity, and detection of malware for devices both on / off the network.",
+  "description": "Qualys Indication of Compromise. Threat hunting, suspicious activity monitoring, and malware family detection. Fully cloud-based, it's easy to deploy and manage, and scales to millions of assets\n\n**Lightweight and scalable capture and search of system activity details**  \nFrom Qualys IOC's single console, you can monitor current and historical system activity for all on-premise servers, user endpoints, and cloud instances - even for assets that are currently offline or have been re-imaged by IT.\n\n**Quickly search, investigate, hunt, and respond to security incidents**  \nSecurity analysts use the web interface for offline search, hunting, and investigations, and use the visual interfaces to easily find outliers, create dashboards, and perform ad hoc querying by pivot searching across billions of events.\n\n**Qualys malware family detection**  \nQualys Malware Labs continuously creates new behavior models using OpenIOC formats into the platform for detection against new and previous events to find enterprise-targeted malware family variants without using signatures.\n\nMost malware innovation is focused on creating new variants of existing malware families to evade detection by signature-based systems, a detection capability standard in Qualys IOC application.",
+  "tips": "When configuring this integration, you must first gather some information from your Qualys IOC account and add the Qualys IOC Module\n\n1. Login to the Qualys console, from the **Administration** utility choose **User Management**\n2. Click **Create User**, and choose **Reader User**\n3. Fill out the fields with the desired information, click **Save**\n4. Select the new user from the list and click **Edit**\n5. Choose **Roles and Scopes**, assign the **IOC User** role, click **Save**\n6. Open the email from `Qualys Inc <qualys@qualys.com>` save the the **username** into a file and click on **Link to access your password**\n7. Save the **Password** into a file, or leave the tab open\n8. Complete the **Add New Qualys IOC Module** form:\n    - **Module Name** - Leave the default name or enter a name that is meaningful to you.\n10. Click **Save** to complete the Qualys IOC module configuration.",
+  "external_references": [
+    {
+      "label": "Free Trial",
+      "link": "https://www.qualys.com/free-trial/"
+    },
+    {
+      "label": "Contact Us",
+      "link": "https://www.qualys.com/forms/request-a-call/"
+    },
+    {
+      "label": "60 days remote endpoint protection",
+      "link": "https://www.qualys.com/forms/remote-endpoint/"
+    },
+    {
+      "label": "Press Release",
+      "link": "https://www.qualys.com/company/newsroom/news-releases/usa/qualys-indication-of-compromise-ioc-2-0-now-provides-advanced-attack/"
+    }
+  ],
+  "configuration_spec": [
+    {
+      "key": "custom_user",
+      "type": "string",
+      "label": "Username",
+      "tooltip": "The Qualys IOC username",
+      "required": true
+    },
+    {
+      "key": "custom_pass",
+      "type": "password",
+      "label": "Password",
+      "tooltip": "The Qualys IOC password",
+      "required": true
+    },
+    {
+      "key": "custom_API_URL",
+      "type": "string",
+      "label": "API URL",
+      "tooltip": "The Qualys IOC API URL",
+      "required": true
+    },
+    {
+      "key": "custom_PLATFORM_URL",
+      "type": "string",
+      "label": "Platform URL",
+      "tooltip": "The Qualys IOC platform URL",
+      "required": true
+    },
+    {
+      "key": "custom_CTR_ENTITIES_LIMIT",
+      "type": "integer",
+      "label": "Entities Limit",
+      "tooltip": "Restricts the maximum number of `Sightings`, `Indicators` and `Judgements`",
+      "required": false
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "health",
+      "description": "Performs health check against Qualys IOC API."
+    },
+    {
+      "id": "observe",
+      "description": "Queries Qualys for an observable and returns Sighting, Indicator and Judgement."
+    },
+        {
+      "id": "refer",
+      "description": "Pivot from an observable into Qualys IOC."
+    }
+  ],
+  "properties": {
+    "supported-apis": [
+      "health",
+      "observe/observables",
+      "refer/observables"
+    ],
+    "auth-type": "configuration-token",
+    "configuration-token-alg": "RS256",
+    "custom_jwks_host": "visibility.amp.cisco.com"
+  },
+  "logo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48c3R5bGU+dHNwYW4geyB3aGl0ZS1zcGFjZTpwcmUgfS5zaHAwIHsgZmlsbDogbm9uZTtzdHJva2U6ICMyZThiZTA7c3Ryb2tlLXdpZHRoOiAxLjMzMyB9IC5zaHAxIHsgZmlsbDogIzJlOGJlMCB9IDwvc3R5bGU+PHBhdGggY2xhc3M9InNocDAiIGQ9Ik00MC4xMiA0NS4wNUMyOS4zNyA0Ny4yIDE4LjYzIDQ3LjIgNy44OCA0NS4wNUM1LjY4IDQ0LjU5IDMuNDEgNDIuMzIgMi45NSA0MC4xMkMwLjggMjkuMzcgMC44IDE4LjYzIDIuOTUgNy44OEMzLjQxIDUuNjggNS42OCAzLjQxIDcuODggMi45NUMxOC42MyAwLjggMjkuMzcgMC44IDQwLjEyIDIuOTVDNDIuMzIgMy40MSA0NC41OSA1LjY4IDQ1LjA1IDcuODhDNDcuMiAxOC42MyA0Ny4yIDI5LjM3IDQ1LjA1IDQwLjEyQzQ0LjU5IDQyLjMyIDQyLjMyIDQ0LjU5IDQwLjEyIDQ1LjA1WiIgLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJzaHAxIiBkPSJNOS44OSAxOC41M0wxMi40OSAxOC41M0wxMi40OSAzMC42N0w5Ljg5IDMwLjY3TDkuODkgMTguNTNaTTE0LjQ4IDI0LjZDMTQuNDggMjAuNjcgMTYuODQgMTguMjkgMjAuMzkgMTguMjlDMjMuOTUgMTguMjkgMjYuMzEgMjAuNjcgMjYuMzEgMjQuNkMyNi4zMSAyOC41MyAyMy45NSAzMC45MSAyMC4zOSAzMC45MUMxNi44NCAzMC45MSAxNC40OCAyOC41MyAxNC40OCAyNC42Wk0xNy4xNyAyNC42QzE3LjE3IDI3LjA2IDE4LjIxIDI4Ljc2IDIwLjM5IDI4Ljc2QzIyLjU4IDI4Ljc2IDIzLjYyIDI3LjA2IDIzLjYyIDI0LjZDMjMuNjIgMjIuMTQgMjIuNTggMjAuNDQgMjAuMzkgMjAuNDRDMTguMjEgMjAuNDQgMTcuMTcgMjIuMTQgMTcuMTcgMjQuNlpNMjcuOCAyNC42QzI3LjggMjAuNjMgMzAuMDggMTguMjkgMzMuNzQgMTguMjlDMzYuMzIgMTguMjkgMzguMTQgMTkuNDMgMzguODcgMjEuNzJMMzYuMzQgMjIuNjFDMzUuOTMgMjEuMjUgMzUuMTUgMjAuNDYgMzMuNjkgMjAuNDZDMzEuNTQgMjAuNDYgMzAuNDggMjIuMTkgMzAuNDggMjQuNkMzMC40OCAyNi45OSAzMS41NCAyOC43NCAzMy43MSAyOC43NEMzNS4wNCAyOC43NCAzNS44NyAyOC4wNyAzNi4zMSAyNi43MUwzOC44IDI3LjZDMzguMDEgMjkuNjQgMzYuMzIgMzAuOTEgMzMuNjcgMzAuOTFDMzAuMSAzMC45MSAyNy44IDI4LjU5IDI3LjggMjQuNloiIC8+PC9zdmc+"
+}

@@ -69,10 +69,7 @@ def test_call_with_jwt_payload_structure_error(
         qualys_response_unauthorized_creds,
         mock_request
 ):
-    mock_request.side_effect = [
-        qualys_response_unauthorized_creds,
-        qualys_response_public_key
-    ]
+    mock_request.return_value = qualys_response_public_key
     response = client.post(
         route, json=valid_json,
         headers=headers(valid_jwt(wrong_structure=True))

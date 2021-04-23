@@ -1,1 +1,0 @@
-RELAY_PREFIX = 'dev'

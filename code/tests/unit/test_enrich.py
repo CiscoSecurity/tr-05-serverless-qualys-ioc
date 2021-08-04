@@ -180,6 +180,7 @@ def test_enrich_call_success_with_extended_error_handling(
         )
 
         assert response.status_code == HTTPStatus.OK
-        assert response.json.pop('data')
-        assert response.json == internal_server_error_expected_payload
+        response = response.get_json()
+        assert response.pop('data')
+        assert response == internal_server_error_expected_payload
         assert token_mock.call_count == 3

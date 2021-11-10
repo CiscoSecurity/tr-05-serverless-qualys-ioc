@@ -6,11 +6,8 @@ from tests.functional.library.constants import OBSERVABLE_DICT
 
 @pytest.mark.parametrize("relay_endpoint", (
         "health",
-        "deliberate_observables",
         "refer_observables",
         "observe_observables",
-        "respond_observables",
-        "respond_trigger"
 ))
 def test_positive_relay_api(relay_endpoint, relay_api):
     """ Test relay api mock in Qualys

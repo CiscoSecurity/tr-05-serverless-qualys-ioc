@@ -40,11 +40,6 @@ def observe():
     return jsonify_result()
 
 
-@api.route('/deliberate/observables', methods=['POST'])
-def deliberate():
-    return jsonify_data({})
-
-
 @api.route('/refer/observables', methods=['POST'])
 def refer():
     observables = get_observables()

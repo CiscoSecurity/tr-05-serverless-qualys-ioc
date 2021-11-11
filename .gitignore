@@ -128,3 +128,6 @@ project.properties
 
 # PyCharm
 .idea/
+
+#macOS
+.DS_Store

@@ -87,8 +87,8 @@ def get_credentials():
         set_env_variable(payload, 'PLATFORM_URL')
         set_env_variable(payload, 'CTR_ENTITIES_LIMIT')
 
-        assert payload.get('user')
-        assert payload.get('pass')
+        assert 'user' in payload
+        assert 'pass' in payload
 
         return payload
     except tuple(expected_errors) as error:

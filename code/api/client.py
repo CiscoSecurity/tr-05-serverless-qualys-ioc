@@ -2,7 +2,7 @@ import requests
 
 from typing import Dict
 from http import HTTPStatus
-from flask import session, current_app
+from flask import g, current_app
 from requests.exceptions import SSLError, ConnectionError, MissingSchema
 
 from api.errors import (
@@ -73,7 +73,7 @@ def headers(credentials: dict, fresh: bool = False) -> Dict[str, str]:
 def token(credentials: dict, fresh: bool = False) -> str:
     """Returns an authorization token for Qualys."""
 
-    if fresh or 'token' not in session:
+    if fresh or not hasattr(g, 'token'):
         username = credentials['user']
         password = credentials['pass']
 
@@ -90,6 +90,6 @@ def token(credentials: dict, fresh: bool = False) -> str:
         if not response.ok:
             raise CriticalResponseError(response)
 
-        session['token'] = response.text
+        g.token = response.text
 
-    return session['token']
+    return g.token

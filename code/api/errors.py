@@ -85,7 +85,7 @@ class CriticalResponseError(TRFormattedError):
                 'message': 'Service temporarily unavailable. '
                            'Please try again later.'
             },
-            HTTPStatus.BAD_REQUEST: lambda: {'code': INVALID_ARGUMENT},
+            HTTPStatus.BAD_REQUEST: lambda: {'code': AUTH_ERROR},
             HTTPStatus.FORBIDDEN: lambda: {'code': PERMISSION_DENIED},
             HTTPStatus.NOT_FOUND: lambda: {'code': NOT_FOUND},
             HTTPStatus.INTERNAL_SERVER_ERROR: lambda: {'code': UNKNOWN},

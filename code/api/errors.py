@@ -62,37 +62,36 @@ class InvalidArgumentError(TRFormattedError):
 
 class CriticalResponseError(TRFormattedError):
     def __init__(self, response):
-        """
-        https://docs.microsoft.com/en-us/Qualys/errors?context=Qualys%2Fapi%2F1.0&view=Qualys-rest-1.0
-        """
+        message = response.text
 
-        message = response.json()
-        message = (message.get('message')
-                   or message.get('authentication_exceptions')
-                   or response.text)
+        def get_auth_failed_json():
+            response_json = response.json()
+            return (response_json.get('message')
+                    or response_json.get('authentication_exceptions')
+                    or response.text)
 
         details_map = {
-            HTTPStatus.TOO_MANY_REQUESTS: {
+            HTTPStatus.TOO_MANY_REQUESTS: lambda: {
                 'code': TOO_MANY_REQUESTS,
                 'message': 'Too many requests to Qualys IOC '
                            'have been made. Please try again later.'
             },
-            HTTPStatus.UNAUTHORIZED: {
+            HTTPStatus.UNAUTHORIZED: lambda: {
                 'code': AUTH_ERROR,
-                'message': f'Authorization failed: {message}'
+                'message': f'Authorization failed: {get_auth_failed_json()}'
             },
-            HTTPStatus.SERVICE_UNAVAILABLE: {
+            HTTPStatus.SERVICE_UNAVAILABLE: lambda: {
                 'code': UNAVAILABLE,
                 'message': 'Service temporarily unavailable. '
                            'Please try again later.'
             },
-            HTTPStatus.BAD_REQUEST: {'code': INVALID_ARGUMENT},
-            HTTPStatus.FORBIDDEN: {'code': PERMISSION_DENIED},
-            HTTPStatus.NOT_FOUND: {'code': NOT_FOUND},
-            HTTPStatus.INTERNAL_SERVER_ERROR: {'code': UNKNOWN},
+            HTTPStatus.BAD_REQUEST: lambda: {'code': AUTH_ERROR},
+            HTTPStatus.FORBIDDEN: lambda: {'code': PERMISSION_DENIED},
+            HTTPStatus.NOT_FOUND: lambda: {'code': NOT_FOUND},
+            HTTPStatus.INTERNAL_SERVER_ERROR: lambda: {'code': UNKNOWN},
         }
 
-        details = details_map.get(response.status_code, {})
+        details = details_map.get(response.status_code, {})()
 
         super().__init__(
             details.get('code', UNKNOWN),

@@ -1,0 +1,229 @@
+{
+  "observable": {
+    "type": "sha256",
+    "value": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105"
+  },
+  "input": [
+    {
+      "dateTime": "2020-02-10T00:21:04.000+0000",
+      "score": "8",
+      "file": {
+        "fullPath": "C:\\Users\\User01\\Downloads\\Malware\\bublik\\bublik.exe",
+        "path": "C:\\Users\\User01\\Downloads\\Malware\\bublik",
+        "extension": "exe",
+        "fileName": "bublik.exe",
+        "createdDate": "2020-02-10T00:18:31.290+0000",
+        "sha256": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105",
+        "md5": "1577e6455a5d19413c9e0c7726983e8c"
+      },
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "score": 8,
+          "sha256": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105",
+          "familyName": "Kolab",
+          "verdict": "MALICIOUS",
+          "threatName": "Win32.Worm.Kolab",
+          "category": "Worm"
+        }
+      ],
+      "id": "F_5ab4ee62-1d5f-3c19-a19f-7a86dc453569_10-2-2020",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS"
+      }
+    }
+  ],
+  "output": {
+    "sightings": [
+      {
+        "confidence": "High",
+        "count": 1,
+        "external_ids": [
+          "F_5ab4ee62-1d5f-3c19-a19f-7a86dc453569_10-2-2020"
+        ],
+        "external_references": [],
+        "observables": [
+          {
+            "type": "sha256",
+            "value": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105"
+          }
+        ],
+        "observed_time": {
+          "start_time": "2020-02-10T00:21:04.000+0000",
+          "end_time": "2020-02-10T00:21:04.000+0000"
+        },
+        "relations": [
+          {
+            "origin": "Qualys IOC",
+            "related": {
+              "type": "sha256",
+              "value": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105"
+            },
+            "relation": "File_Name_Of",
+            "source": {
+              "type": "file_name",
+              "value": "bublik.exe"
+            }
+          },
+          {
+            "origin": "Qualys IOC",
+            "related": {
+              "type": "md5",
+              "value": "1577e6455a5d19413c9e0c7726983e8c"
+            },
+            "relation": "File_Name_Of",
+            "source": {
+              "type": "file_name",
+              "value": "bublik.exe"
+            }
+          },
+          {
+            "origin": "Qualys IOC",
+            "related": {
+              "type": "sha256",
+              "value": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105"
+            },
+            "relation": "File_Path_Of",
+            "source": {
+              "type": "file_path",
+              "value": "C:\\Users\\User01\\Downloads\\Malware\\bublik\\bublik.exe"
+            }
+          },
+          {
+            "origin": "Qualys IOC",
+            "related": {
+              "type": "md5",
+              "value": "1577e6455a5d19413c9e0c7726983e8c"
+            },
+            "relation": "File_Path_Of",
+            "source": {
+              "type": "file_path",
+              "value": "C:\\Users\\User01\\Downloads\\Malware\\bublik\\bublik.exe"
+            }
+          }
+        ],
+        "schema_version": "1.0.17",
+        "sensor": "endpoint",
+        "severity": "High",
+        "source": "Qualys IOC",
+        "targets": [
+          {
+            "observables": [
+              {
+                "type": "hostname",
+                "value": "WIN7-HOST-01"
+              },
+              {
+                "type": "ip",
+                "value": "10.10.10.29"
+              },
+              {
+                "type": "ip",
+                "value": "fe80::f183:4a7b:3ee8:1576"
+              }
+            ],
+            "observed_time": {
+              "start_time": "2020-02-10T00:21:04.000+0000",
+              "end_time": "2020-02-10T00:21:04.000+0000"
+            },
+            "type": "endpoint",
+            "os": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130"
+          }
+        ],
+        "type": "sighting",
+        "description": "A Qualys IOC event related to \"bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105\"",
+        "data": {
+          "columns": [
+            {
+              "name": "Active",
+              "type": "string"
+            }
+          ],
+          "rows": [
+            [
+              "True"
+            ]
+          ],
+          "row_count": 1
+        }
+      }
+      ],
+    "judgements": [
+        {
+          "confidence": "High",
+          "disposition": 2,
+          "disposition_name": "Malicious",
+          "external_ids": [
+            "F_5ab4ee62-1d5f-3c19-a19f-7a86dc453569_10-2-2020"
+          ],
+          "external_references": [],
+          "observable": {
+            "type": "sha256",
+            "value": "bb72b8aa82b48bc68a082f86a8a8f4262023a732b464f03e44a3a9eb83229105"
+          },
+          "priority": 90,
+          "reason": "Win32.Worm.Kolab",
+          "schema_version": "1.0.17",
+          "severity": "High",
+          "source": "Qualys IOC",
+          "type": "judgement",
+          "valid_time": {}
+        }
+      ],
+    "indicators": [
+        {
+          "type": "indicator",
+          "title": "Malicious File event",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "producer": "Qualys IOC",
+          "severity": "High",
+          "valid_time": {},
+          "external_ids": [
+            "F_5ab4ee62-1d5f-3c19-a19f-7a86dc453569_10-2-2020"
+          ],
+          "confidence": "High"
+        }
+      ],
+    "relationships": [
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "sighting-of",
+          "external_ids": []
+        }
+      ]
+  }
+}

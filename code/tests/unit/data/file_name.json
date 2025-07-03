@@ -1,0 +1,778 @@
+{
+  "input": [
+    {
+      "dateTime": "2020-03-17T12:19:31.000+0000",
+      "score": "0",
+      "eventProcessedTime": "2020-03-17T12:27:36.499+0000",
+      "file": {
+        "fullPath": "C:\\ProgramData\\Package Cache\\{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}\\VC_redist.x64.exe",
+        "path": "C:\\ProgramData\\Package Cache\\{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}",
+        "extension": "exe",
+        "fileName": "VC_redist.x64.exe",
+        "createdDate": "2018-10-02T19:02:54.045+0000",
+        "sha256": "fee2396c1e6f6246b1dc3db83e78d8d4148628532fcd492a7bcf1d8e7a3195cd",
+        "md5": "f8c95675fca1370d5c0164584be6952a"
+      },
+      "timeSeriesId": "F_2508c73e-2309-37e9-a049-d2b0e3a05036_17-3-2020",
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "score": 0,
+          "sha256": "fee2396c1e6f6246b1dc3db83e78d8d4148628532fcd492a7bcf1d8e7a3195cd",
+          "verdict": "KNOWN"
+        }
+      ],
+      "id": "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_1529094529078014264",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "lastLoggedOnUser": ".\\User01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS",
+        "assetType": "HOST",
+        "tags": [
+          {
+            "name": "IOC Host",
+            "id": 13546632,
+            "uuid": "88a6941a-e5eb-43cf-848b-2497c0030294"
+          },
+          {
+            "name": "Cloud Agent",
+            "id": 12552386,
+            "uuid": "52caedfa-8975-41a7-b324-a9d46bdd6c58"
+          }
+        ]
+      }
+    },
+    {
+      "dateTime": "2020-03-17T12:19:15.000+0000",
+      "file": {
+        "fullPath": "C:\\Users\\User01\\Downloads\\ChromeSetup.exe",
+        "path": "C:\\Users\\User01\\Downloads",
+        "extension": "exe",
+        "fileName": "ChromeSetup.exe",
+        "createdDate": "2020-02-09T20:19:09.564+0000",
+        "sha256": "585e878e9fd0a0c1771d5859402c466a7e94681caef2c93cdc5b4a990867c7b0",
+        "md5": "3d5a85655842f5e66d6462eca8f04aa0"
+      },
+      "eventProcessedTime": "2020-03-17T12:27:37.287+0000",
+      "timeSeriesId": "F_87d0660f-d487-399a-8f94-05340722043a_17-3-2020",
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "sha256": "585e878e9fd0a0c1771d5859402c466a7e94681caef2c93cdc5b4a990867c7b0",
+          "verdict": "UNKNOWN"
+        }
+      ],
+      "id": "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_3480527008110556743",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "lastLoggedOnUser": ".\\User01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS",
+        "assetType": "HOST",
+        "tags": [
+          {
+            "name": "IOC Host",
+            "id": 13546632,
+            "uuid": "88a6941a-e5eb-43cf-848b-2497c0030294"
+          },
+          {
+            "name": "Cloud Agent",
+            "id": 12552386,
+            "uuid": "52caedfa-8975-41a7-b324-a9d46bdd6c58"
+          }
+        ]
+      }
+    },
+    {
+      "dateTime": "2020-03-17T12:19:13.000+0000",
+      "score": "0",
+      "eventProcessedTime": "2020-03-17T12:27:37.535+0000",
+      "file": {
+        "fullPath": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19\\VMwareToolsUpgrader.exe",
+        "path": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19",
+        "extension": "exe",
+        "fileName": "VMwareToolsUpgrader.exe",
+        "createdDate": "2018-10-02T19:02:00.018+0000",
+        "sha256": "b310ee06af3777ce3941385ef47049f17d6fd08c1ebff0bc2597acacbe3f0c1f",
+        "md5": "4d56fa77ed6b22af21da9cbd546d7b2f"
+      },
+      "timeSeriesId": "F_f3db77b3-bd89-3e27-a935-518ca7e5c28f_17-3-2020",
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "score": 0,
+          "sha256": "b310ee06af3777ce3941385ef47049f17d6fd08c1ebff0bc2597acacbe3f0c1f",
+          "verdict": "KNOWN"
+        }
+      ],
+      "id": "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6191535533943567619",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "lastLoggedOnUser": ".\\User01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS",
+        "assetType": "HOST",
+        "tags": [
+          {
+            "name": "IOC Host",
+            "id": 13546632,
+            "uuid": "88a6941a-e5eb-43cf-848b-2497c0030294"
+          },
+          {
+            "name": "Cloud Agent",
+            "id": 12552386,
+            "uuid": "52caedfa-8975-41a7-b324-a9d46bdd6c58"
+          }
+        ]
+      }
+    },
+    {
+      "dateTime": "2020-03-17T12:19:23.000+0000",
+      "score": "0",
+      "eventProcessedTime": "2020-03-17T12:27:38.575+0000",
+      "file": {
+        "fullPath": "C:\\Users\\User01\\Downloads\\Tools\\processhacker-2.39-bin\\x86\\plugins\\OnlineChecks.dll",
+        "path": "C:\\Users\\User01\\Downloads\\Tools\\processhacker-2.39-bin\\x86\\plugins",
+        "extension": "dll",
+        "fileName": "OnlineChecks.dll",
+        "createdDate": "2016-03-29T17:35:10.000+0000",
+        "sha256": "118192e0816876cb1af3453a36ff2afdd48c09591399779c7b12dd083b1efcea",
+        "md5": "d811b73d47b603e0d212fe311409b5d8"
+      },
+      "timeSeriesId": "F_893e4602-f422-3eac-9546-a9512ba8f8d7_17-3-2020",
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "score": 0,
+          "sha256": "118192e0816876cb1af3453a36ff2afdd48c09591399779c7b12dd083b1efcea",
+          "verdict": "KNOWN"
+        }
+      ],
+      "id": "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6971646820704658234",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "lastLoggedOnUser": ".\\User01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS",
+        "assetType": "HOST",
+        "tags": [
+          {
+            "name": "IOC Host",
+            "id": 13546632,
+            "uuid": "88a6941a-e5eb-43cf-848b-2497c0030294"
+          },
+          {
+            "name": "Cloud Agent",
+            "id": 12552386,
+            "uuid": "52caedfa-8975-41a7-b324-a9d46bdd6c58"
+          }
+        ]
+      }
+    },
+    {
+      "dateTime": "2020-03-17T12:19:12.000+0000",
+      "score": "0",
+      "eventProcessedTime": "2020-03-17T12:27:40.541+0000",
+      "file": {
+        "fullPath": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19\\setup64.exe",
+        "path": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19",
+        "extension": "exe",
+        "fileName": "setup64.exe",
+        "createdDate": "2018-10-02T19:02:00.080+0000",
+        "sha256": "d46545095539ca67058954c908e51f1b823cdd89f480d30c4dade3a5f28f16e7",
+        "md5": "56a01bd50695f7f65cf548c1a9cd1302"
+      },
+      "timeSeriesId": "F_c5b46bf4-dcca-3ba7-a01d-387c0ebda1d7_17-3-2020",
+      "action": "CREATED",
+      "indicator2": [
+        {
+          "score": 0,
+          "sha256": "d46545095539ca67058954c908e51f1b823cdd89f480d30c4dade3a5f28f16e7",
+          "verdict": "KNOWN"
+        }
+      ],
+      "id": "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_7645839498079341860",
+      "type": "FILE",
+      "asset": {
+        "fullOSName": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130",
+        "hostName": "WIN7-HOST-01",
+        "agentId": "5b49017b-90dd-4a6d-92ea-7651bafdc1ec",
+        "interfaces": [
+          {
+            "ipAddress": "10.10.10.29"
+          },
+          {
+            "ipAddress": "fe80::f183:4a7b:3ee8:1576"
+          }
+        ],
+        "netBiosName": "WIN7-HOST-01",
+        "lastLoggedOnUser": ".\\User01",
+        "customerId": "b556a9b9-474e-66e5-81cc-471d5a1f712b",
+        "platform": "WINDOWS",
+        "assetType": "HOST",
+        "tags": [
+          {
+            "name": "IOC Host",
+            "id": 13546632,
+            "uuid": "88a6941a-e5eb-43cf-848b-2497c0030294"
+          },
+          {
+            "name": "Cloud Agent",
+            "id": 12552386,
+            "uuid": "52caedfa-8975-41a7-b324-a9d46bdd6c58"
+          }
+        ]
+      }
+    }
+  ],
+  "output": {
+    "sightings": [
+        {
+          "confidence": "High",
+          "count": 1,
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_1529094529078014264"
+          ],
+          "external_references": [],
+          "observables": [
+            {
+              "type": "file_name",
+              "value": "dummy"
+            }
+          ],
+          "observed_time": {
+            "start_time": "2020-03-17T12:19:31.000+0000",
+            "end_time": "2020-03-17T12:19:31.000+0000"
+          },
+          "relations": [
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "fee2396c1e6f6246b1dc3db83e78d8d4148628532fcd492a7bcf1d8e7a3195cd"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "VC_redist.x64.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "f8c95675fca1370d5c0164584be6952a"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "VC_redist.x64.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "fee2396c1e6f6246b1dc3db83e78d8d4148628532fcd492a7bcf1d8e7a3195cd"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\ProgramData\\Package Cache\\{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}\\VC_redist.x64.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "f8c95675fca1370d5c0164584be6952a"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\ProgramData\\Package Cache\\{e2ee15e2-a480-4bc5-bfb7-e9803d1d9823}\\VC_redist.x64.exe"
+              }
+            }
+          ],
+          "schema_version": "1.0.17",
+          "severity": "None",
+          "sensor": "endpoint",
+          "source": "Qualys IOC",
+          "targets": [
+            {
+              "observables": [
+                {
+                  "type": "hostname",
+                  "value": "WIN7-HOST-01"
+                },
+                {
+                  "type": "ip",
+                  "value": "10.10.10.29"
+                },
+                {
+                  "type": "ip",
+                  "value": "fe80::f183:4a7b:3ee8:1576"
+                }
+              ],
+              "observed_time": {
+                "start_time": "2020-03-17T12:19:31.000+0000",
+                "end_time": "2020-03-17T12:19:31.000+0000"
+              },
+              "type": "endpoint",
+              "os": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130"
+            }
+          ],
+          "type": "sighting",
+          "description": "A Qualys IOC event related to \"dummy\"",
+          "data": {
+            "columns": [
+              {
+                "name": "Active",
+                "type": "string"
+              }
+            ],
+            "rows": [
+              [
+                "True"
+              ]
+            ],
+            "row_count": 1
+          }
+        },
+        {
+          "confidence": "High",
+          "count": 1,
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_3480527008110556743"
+          ],
+          "external_references": [],
+          "observables": [
+            {
+              "type": "file_name",
+              "value": "dummy"
+            }
+          ],
+          "observed_time": {
+            "start_time": "2020-03-17T12:19:15.000+0000",
+            "end_time": "2020-03-17T12:19:15.000+0000"
+          },
+          "relations": [
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "585e878e9fd0a0c1771d5859402c466a7e94681caef2c93cdc5b4a990867c7b0"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "ChromeSetup.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "3d5a85655842f5e66d6462eca8f04aa0"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "ChromeSetup.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "585e878e9fd0a0c1771d5859402c466a7e94681caef2c93cdc5b4a990867c7b0"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\Users\\User01\\Downloads\\ChromeSetup.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "3d5a85655842f5e66d6462eca8f04aa0"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\Users\\User01\\Downloads\\ChromeSetup.exe"
+              }
+            }
+          ],
+          "schema_version": "1.0.17",
+          "severity": "Unknown",
+          "sensor": "endpoint",
+          "source": "Qualys IOC",
+          "targets": [
+            {
+              "observables": [
+                {
+                  "type": "hostname",
+                  "value": "WIN7-HOST-01"
+                },
+                {
+                  "type": "ip",
+                  "value": "10.10.10.29"
+                },
+                {
+                  "type": "ip",
+                  "value": "fe80::f183:4a7b:3ee8:1576"
+                }
+              ],
+              "observed_time": {
+                "start_time": "2020-03-17T12:19:15.000+0000",
+                "end_time": "2020-03-17T12:19:15.000+0000"
+              },
+              "type": "endpoint",
+              "os": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130"
+            }
+          ],
+          "type": "sighting",
+          "description": "A Qualys IOC event related to \"dummy\"",
+          "data": {
+            "columns": [
+              {
+                "name": "Active",
+                "type": "string"
+              }
+            ],
+            "rows": [
+              [
+                "True"
+              ]
+            ],
+            "row_count": 1
+          }
+        },
+        {
+          "confidence": "High",
+          "count": 1,
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6191535533943567619"
+          ],
+          "external_references": [],
+          "observables": [
+            {
+              "type": "file_name",
+              "value": "dummy"
+            }
+          ],
+          "observed_time": {
+            "start_time": "2020-03-17T12:19:13.000+0000",
+            "end_time": "2020-03-17T12:19:13.000+0000"
+          },
+          "relations": [
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "b310ee06af3777ce3941385ef47049f17d6fd08c1ebff0bc2597acacbe3f0c1f"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "VMwareToolsUpgrader.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "4d56fa77ed6b22af21da9cbd546d7b2f"
+              },
+              "relation": "File_Name_Of",
+              "source": {
+                "type": "file_name",
+                "value": "VMwareToolsUpgrader.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "sha256",
+                "value": "b310ee06af3777ce3941385ef47049f17d6fd08c1ebff0bc2597acacbe3f0c1f"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19\\VMwareToolsUpgrader.exe"
+              }
+            },
+            {
+              "origin": "Qualys IOC",
+              "related": {
+                "type": "md5",
+                "value": "4d56fa77ed6b22af21da9cbd546d7b2f"
+              },
+              "relation": "File_Path_Of",
+              "source": {
+                "type": "file_path",
+                "value": "C:\\Users\\User01\\AppData\\Local\\Temp\\vmware-User01\\00006e19\\VMwareToolsUpgrader.exe"
+              }
+            }
+          ],
+          "schema_version": "1.0.17",
+          "severity": "None",
+          "sensor": "endpoint",
+          "source": "Qualys IOC",
+          "targets": [
+            {
+              "observables": [
+                {
+                  "type": "hostname",
+                  "value": "WIN7-HOST-01"
+                },
+                {
+                  "type": "ip",
+                  "value": "10.10.10.29"
+                },
+                {
+                  "type": "ip",
+                  "value": "fe80::f183:4a7b:3ee8:1576"
+                }
+              ],
+              "observed_time": {
+                "start_time": "2020-03-17T12:19:13.000+0000",
+                "end_time": "2020-03-17T12:19:13.000+0000"
+              },
+              "type": "endpoint",
+              "os": "Microsoft Windows 7 Enterprise 6.1.1130 Service Pack 1 Build 1130"
+            }
+          ],
+          "type": "sighting",
+          "description": "A Qualys IOC event related to \"dummy\"",
+          "data": {
+            "columns": [
+              {
+                "name": "Active",
+                "type": "string"
+              }
+            ],
+            "rows": [
+              [
+                "True"
+              ]
+            ],
+            "row_count": 1
+          }
+        }
+      ],
+    "indicators": [
+        {
+          "type": "indicator",
+          "title": "Known Good",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "producer": "Qualys IOC",
+          "severity": "None",
+          "valid_time": {},
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_1529094529078014264"
+          ],
+          "confidence": "High"
+        },
+      {
+          "type": "indicator",
+          "title": "Known Good",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "producer": "Qualys IOC",
+          "severity": "None",
+          "valid_time": {},
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6191535533943567619"
+          ],
+          "confidence": "High"
+        },
+        {
+          "type": "indicator",
+          "title": "Known Good",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "producer": "Qualys IOC",
+          "severity": "None",
+          "valid_time": {},
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6971646820704658234"
+          ],
+          "confidence": "High"
+        }
+      ],
+    "judgements": [
+        {
+          "confidence": "High",
+          "disposition": 1,
+          "disposition_name": "Clean",
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_1529094529078014264"
+          ],
+          "external_references": [],
+          "observable": {
+            "type": "file_name",
+            "value": "dummy"
+          },
+          "priority": 90,
+          "reason": "",
+          "schema_version": "1.0.17",
+          "severity": "None",
+          "source": "Qualys IOC",
+          "type": "judgement",
+          "valid_time": {}
+        },
+        {
+          "confidence": "High",
+          "disposition": 5,
+          "disposition_name": "Unknown",
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_3480527008110556743"
+          ],
+          "external_references": [],
+          "observable": {
+            "type": "file_name",
+            "value": "dummy"
+          },
+          "priority": 90,
+          "reason": "",
+          "schema_version": "1.0.17",
+          "severity": "Unknown",
+          "source": "Qualys IOC",
+          "type": "judgement",
+          "valid_time": {}
+        },
+        {
+          "confidence": "High",
+          "disposition": 1,
+          "disposition_name": "Clean",
+          "external_ids": [
+            "F_5b49017b-90dd-4a6d-92ea-7651bafdc1ec_6191535533943567619"
+          ],
+          "external_references": [],
+          "observable": {
+            "type": "file_name",
+            "value": "dummy"
+          },
+          "priority": 90,
+          "reason": "",
+          "schema_version": "1.0.17",
+          "severity": "None",
+          "source": "Qualys IOC",
+          "type": "judgement",
+          "valid_time": {}
+        }
+      ],
+    "relationships": [
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "sighting-of",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "based-on",
+          "external_ids": []
+        },
+        {
+          "type": "relationship",
+          "schema_version": "1.0.17",
+          "source": "Qualys IOC",
+          "source_uri": "",
+          "relationship_type": "sighting-of",
+          "external_ids": []
+        }
+      ]
+  }
+}
